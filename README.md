@@ -7,7 +7,7 @@ and detection algorthims, and outputting the control signals to the electromagne
 printed allowing others to build the device at a low cost. The device can be divided into three
 sections (Mechanical, Electrical, and Software) 
 
-# CAD System Overview
+# System Overview
 <img width="3547" height="4849" alt="Figure1" src="https://github.com/user-attachments/assets/8640313d-6168-41e3-8363-89c74aded3a5" />
 
 
@@ -19,18 +19,14 @@ sections (Mechanical, Electrical, and Software)
 
 
 # Front End and Back End Software Architecture
-
-To Remake using ACS712 current sensors*
+<img width="3093" height="5179" alt="SoftwareFrontendBackend" src="https://github.com/user-attachments/assets/67c889d3-efdc-421b-bcc5-777ba85ad2ea" />
 
 
 # Example Control Algorithm:
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">
 
-# System
-![Magscope3-2](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/697d35fd-252c-45ac-ad69-98e3f2571512)
-
 # Excel Data
-Data regarding a microrobots position, velocity, etc and applied magnetic field actions can be recorded and saved to an excel file. Each row in the excel file corresponds to the microrobots tracking data and action signals sent to the arduino at each frame of the camera. 
+Data regarding a microrobots position, velocity, etc and applied magnetic field actions can be recorded and saved to an excel file. Each row in the excel file corresponds to the microrobots tracking data and action signals sent to the arduino at each frame of the camera. Additionally current sensor data that updates every 15ms is also saved to a seperate sheet.
 Also, a predefined excel file with desired action commands can be imported into the system and applied. The software will begin executing each entry (or row) from the excel file once the "Apply Excel Actions" button is pressed. Each row of actions are applied at each subsequent frame from the camera. 
 <img width="259" alt="Screenshot 2024-12-06 at 11 27 47 AM" src="https://github.com/user-attachments/assets/9a6c4148-71ba-4c54-972f-bc68fefd5a64">
 <img width="775" alt="Screenshot 2024-12-06 at 11 25 11 AM" src="https://github.com/user-attachments/assets/9ce89367-d93f-425e-b5c2-988ce568c746">

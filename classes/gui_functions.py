@@ -989,11 +989,11 @@ class MainWindow(QtWidgets.QMainWindow):
         """Toggle magnetic field simulator visualization on/off."""
         if self.ui.simulationbutton.isChecked():
             self.simulator.start()
-            self.tbprint("Simulation Off")
+            self.tbprint("Simulation On")
             self.ui.simulationbutton.setText("Simulation Off")
         else:
             self.simulator.stop()
-            self.tbprint("Simulation On")
+            self.tbprint("Simulation Off")
             self.ui.simulationbutton.setText("Simulation On")
    
     

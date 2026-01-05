@@ -14,7 +14,8 @@ sections (Mechanical, Electrical, and Software)
 
 # Electrical Component Flowchart and Wiring Diagram
 
-To Remake using ACS712 current sensors*
+<img width="4200" height="3900" alt="image" src="https://github.com/user-attachments/assets/9e01e7bf-e704-4ef7-bf11-3ba38cf1b99a" />
+
 
 # Front End and Back End Software Architecture
 

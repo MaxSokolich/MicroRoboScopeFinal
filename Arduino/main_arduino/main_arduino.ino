@@ -110,16 +110,16 @@ current_data Current_Data;  // Instance used for sending to Python
 //    ACS712 5A = 185 mV/A sensativity
 //    samples    = number of ADC samples to average
 // ================================================================
-float readCurrentFast(uint8_t pin, int samples = 1) {
+float readCurrentFast(uint8_t pin, int samples = 5) {
 
     long sum = 0;  
     for (int i = 0; i < samples; i++) {
         sum += analogRead(pin);   // read raw ADC value
     }
 
-    float raw = analogRead(pin); //(float)sum / samples;                // average ADC reading
-    float voltage = (raw * 5.0) / 1023.0; // convert to volts relative to mid
-    float current = (voltage - 2.5) / 0.185;  // convert volts to Amps
+    float raw = float(sum)/samples;  // average ADC reading
+    float voltage = (raw * 4.93) / 1023.0; // convert to volts relative to mid (4.93 V measure with multimeter)
+    float current = (voltage - 2.52) / 0.185;  // convert volts to Amps (adjusted with offset = 2.52 V)
     return current;
 }
 

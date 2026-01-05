@@ -36,6 +36,7 @@ class ArduinoHandler:
         Send actuation command packet (binary encoded).
         All arguments should be float or int.
         """
+     
         if self._link is not None:
           
             try:
@@ -52,6 +53,7 @@ class ArduinoHandler:
                 idx = self._link.tx_obj(float(acoustic), start_pos=idx)
 
                 self._link.send(idx)
+              
             except Exception as e:
                 self.printer(f"Error sending data: {e}")
 
@@ -94,15 +96,16 @@ class ArduinoHandler:
 
 # Example usage:
 if __name__ == "__main__":
-    arduino = ArduinoHandler(port="/dev/cu.usbmodem1201", baudrate=500000)
+    def printer(msg):
+        print(msg)
+    arduino = ArduinoHandler(port="COM5", printer=printer)
     time.sleep(2)
     print("open arduino srial monitor so you can see data being received")
-    for i in range(100):
-        B = i/100
-        #arduino.send(B, B, B, B, B, B, B, B, B, B)
-        arduino.send(1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        print("Command sent")
-        time.sleep(0.05)
+
+
+    #arduino.send(B, B, B, B, B, B, B, B, B, B)
+    arduino.send(1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+   
     time.sleep(2)
     arduino.send(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     currents = arduino.receive()

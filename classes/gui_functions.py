@@ -142,6 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.videopath = 0
         self.cap = None
         self.tracker = None
+        self.arduino_handler = None
         self.populate_serial_ports() #populate the arduino port list and try to connect to arduino
         self.starttime = time.time()
 
@@ -216,7 +217,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         # create a timer that continously reads the receive arduino incoming data
-        self.arduino_handler = None
+        
         self.arduino_receive_timer = QTimer(self)
         self.arduino_receive_timer.timeout.connect(self.read_receive_arduino)
         self.arduino_receive_timer.start(15)   #15msec timer to read arduino data. must be faster than the rate at which arduino sends data
@@ -830,11 +831,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.simulator.omega = 2 * np.pi * self.simulator.freq
 
         #send actions via ArduinoHandler
-        """  self.tbprint(f"Sending: Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoust: "
-        f"{self.Bx:.2f},{self.By:.2f},{self.Bz:.2f},{self.alpha:.2f},{self.gamma:.2f},"
-        f"{self.freq:.2f},{self.psi:.2f},{self.gradient_status:.2f},{self.equal_field_status:.2f},"
-        f"{self.acoustic_frequency:.2f}")"""
+        
+   
         if self.arduino_handler is not None: 
+            """self.tbprint(f"Sending: Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoust: "
+                    f"{self.Bx:.2f},{self.By:.2f},{self.Bz:.2f},{self.alpha:.2f},{self.gamma:.2f},"
+                    f"{self.freq:.2f},{self.psi:.2f},{self.gradient_status:.2f},{self.equal_field_status:.2f},"
+                    f"{self.acoustic_frequency:.2f}")"""
+            
             self.arduino_handler.send(self.Bx, self.By, self.Bz,
                                             self.alpha, self.gamma, self.freq, self.psi,
                                             self.gradient_status, self.equal_field_status,
@@ -1341,6 +1345,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.arduino_port = None
             self.arduino_handler = None
+        
             
 
 

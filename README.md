@@ -14,11 +14,11 @@ sections (Mechanical, Electrical, and Software)
 
 # Electrical Component Flowchart and Wiring Diagram
 
-<img width="8969" height="3730" alt="electronics" src="https://github.com/user-attachments/assets/4632f909-fad0-4cf2-bebd-ed72d3d4c59e" />
+To Remake using ACS712 current sensors*
 
 # Front End and Back End Software Architecture
 
-<img width="6155" height="2612" alt="Figure6" src="https://github.com/user-attachments/assets/3d7c3ec6-8764-427b-abbe-94f78bce155c" />
+To Remake using ACS712 current sensors*
 
 
 # Example Control Algorithm:

@@ -13,6 +13,7 @@ sections (Mechanical, Electrical, and Software)
 
 
 # Electrical Component Flowchart and Wiring Diagram
+<img width="6256" height="4230" alt="ElectricalComponentFlowchart" src="https://github.com/user-attachments/assets/3f64aaeb-2c95-4393-a307-af97b25cccf2" />
 
 <img width="4200" height="3900" alt="image" src="https://github.com/user-attachments/assets/9e01e7bf-e704-4ef7-bf11-3ba38cf1b99a" />
 

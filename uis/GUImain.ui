@@ -1249,7 +1249,7 @@ font-size: 10pt;</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>18</width>
+        <width>22</width>
         <height>0</height>
        </size>
       </property>
@@ -1721,7 +1721,7 @@ color: rgb(0,255,0);</string>
      </property>
      <property name="minimumSize">
       <size>
-       <width>18</width>
+       <width>22</width>
        <height>0</height>
       </size>
      </property>
@@ -1799,9 +1799,9 @@ font-size: 10pt;</string>
      <widget class="QPushButton" name="joystickbutton">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>30</x>
         <y>80</y>
-        <width>161</width>
+        <width>211</width>
         <height>31</height>
        </rect>
       </property>
@@ -1849,9 +1849,9 @@ font-size: 10pt;</string>
      <widget class="QPushButton" name="controlbutton">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>140</x>
         <y>40</y>
-        <width>161</width>
+        <width>111</width>
         <height>31</height>
        </rect>
       </property>
@@ -1865,7 +1865,7 @@ font-size: 10pt;</string>
                 border-color: rgb(0, 0, 255);
                 min-width: 1em;
 
-                font: bold 20px;
+                font: bold 15px;
             }
       
             QPushButton:checked {
@@ -1897,9 +1897,9 @@ font-size: 10pt;</string>
      <widget class="QPushButton" name="import_excel_actions">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>270</x>
         <y>40</y>
-        <width>181</width>
+        <width>121</width>
         <height>31</height>
        </rect>
       </property>
@@ -1924,7 +1924,7 @@ font-size: 10pt;</string>
             }</string>
       </property>
       <property name="text">
-       <string>Import Excel Actions</string>
+       <string>Import Excel </string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -1933,9 +1933,9 @@ font-size: 10pt;</string>
      <widget class="QPushButton" name="apply_actions">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>280</x>
         <y>80</y>
-        <width>181</width>
+        <width>111</width>
         <height>31</height>
        </rect>
       </property>
@@ -1981,7 +1981,7 @@ font-size: 10pt;</string>
             }</string>
       </property>
       <property name="text">
-       <string>Apply Excel Actions</string>
+       <string>Apply Excel </string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -2014,6 +2014,54 @@ font-size: 10pt;</string>
         <width>271</width>
         <height>21</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="initializebutton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+                color: rgb(255, 255, 255);
+                background-color: rgb(0, 0, 255);
+                border-style: outset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(0, 0, 255);
+                min-width: 1em;
+
+                font: bold 15px;
+            }
+      
+            QPushButton:checked {
+                color: rgb(255, 255, 255);
+                background-color: rgb(255, 0, 0);
+                border-style: inset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(255, 0, 0);
+                font: bold 21px;
+                min-width: 1em;
+               
+            }
+            QPushButton:hover {
+                background-color: rgb(100, 100, 100);
+                color: rgb(255, 255, 255);
+                border-color: rgb(0, 255, 0);
+                padding-left: 5px;
+                padding-top: 5px;
+            }</string>
+      </property>
+      <property name="text">
+       <string>Initialize</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

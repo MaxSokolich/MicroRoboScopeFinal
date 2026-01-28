@@ -703,7 +703,6 @@ void loop()
         set6(-Bz_final);
     }
 
-
     // ================================================================
     // READ ALL SIX COIL CURRENTS (ACS712 5A sensors)
     // Multiply each reading by dirN to recover signed current direction
@@ -715,12 +714,6 @@ void loop()
     Current_Data.Coil5_current = readCurrentFast(A4) * dir5;
     Current_Data.Coil6_current = readCurrentFast(A5) * dir6;
 
-    //Serial.print(Current_Data.Coil1_current); Serial.print(" ");
-    //Serial.print(Current_Data.Coil2_current); Serial.print(" ");
-    //Serial.print(Current_Data.Coil3_current); Serial.print(" ");
-    //Serial.print(Current_Data.Coil4_current); Serial.print(" ");
-    //Serial.print(Current_Data.Coil5_current); Serial.print(" ");
-    //Serial.println(Current_Data.Coil6_current);
 
 
     // ================================================================

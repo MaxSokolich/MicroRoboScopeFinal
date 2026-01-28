@@ -10,6 +10,7 @@ class Controller:
     def __init__(self):
         self.reset()
      
+     
 
     def reset(self):
         self.node = 0
@@ -38,13 +39,17 @@ class Controller:
 
 
         self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
-
+        
 
         #initailize pushing algorithm stuff
         self.pushing_algorithm = pushing_algorithm()
 
-        #initalize multi agent algorithm stuff
-        self.multi_agent_algorithm = multi_agent_algorithm()
+        #initalize multi agent algorithm 
+        self.pix2metric = 3.45 / 10
+        self.video_width = 2448
+        self.video_height = 2048
+        self.multi_agent_algorithm = multi_agent_algorithm(self.pix2metric, self.video_width, self.video_height)
+
 
 
 
@@ -146,10 +151,10 @@ class Controller:
 
 
 
-    def run_multi_agent(self, frame, robot_list, arrivalthresh, pixel2um):
+    def run_multi_agent(self, robot_list, frame):
         
         #run multi agent algorithm
-        frame, self.alpha, self.gamma, self.freq = self.multi_agent_algorithm.run(frame, robot_list, arrivalthresh, pixel2um)
+        frame, self.alpha, self.gamma, self.freq = self.multi_agent_algorithm.run(robot_list, frame)
         self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
 
 

@@ -7,10 +7,18 @@ for controlling and tracking microrobots using magnetic and acoustic fields.
 Classes:
     MainWindow: Main application window with video tracking, control, and data recording.
 """
+from classes.gui_widgets import Ui_MainWindow
+from classes.arduino.arduino_handler_main import ArduinoHandler
+from classes.Tracking import tracking_panel_class  
+from classes.Control.control_class import Controller
+from classes.Control.path_planning_class import Path_Planner
+from classes.Control.field_simulation_class import HelmholtzSimulator
+from classes.Control.joystick_class import Mac_Joystick,Linux_Joystick,Windows_Joystick
+
+
 import pyqtgraph as pg
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog
-import sys
 from PyQt5.QtGui import QWheelEvent
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QWidget
@@ -25,7 +33,6 @@ import openpyxl
 import pandas as pd
 from datetime import datetime
 import sys
-from PyQt5.QtWidgets import QApplication
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt 
@@ -41,13 +48,7 @@ try:
 except Exception:
     pass
 
-from classes.gui_widgets import Ui_MainWindow
-from classes.arduino.arduino_handler_main import ArduinoHandler
-from classes.Tracking import tracking_panel_class  
-from classes.Control.control_class import Controller
-from classes.Control.path_planning_class import Path_Planner
-from classes.Control.field_simulation_class import HelmholtzSimulator
-from classes.Control.joystick_class import Mac_Joystick,Linux_Joystick,Windows_Joystick
+
 
 #from classes.Control.genjoystick_class import genJoystick
 
@@ -263,6 +264,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.VideoFeedLabel.installEventFilter(self)
         self.ui.recordbutton.clicked.connect(self.toggle_recording)
         self.ui.controlbutton.clicked.connect(self.toggle_control_status)
+        #self.ui.initializebutton.clicked.connect(self.initilize_control_algorithm)
         self.ui.memorybox.valueChanged.connect(self.get_widget_vals)
         self.ui.RRTtreesizebox.valueChanged.connect(self.get_widget_vals)
         self.ui.arrivalthreshbox.valueChanged.connect(self.get_widget_vals)
@@ -424,7 +426,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 points.append(points[0])
                 self.tracker.robot_list[-1].trajectory = points 
         
-    
+
+        
 
     
 
@@ -503,7 +506,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 #multi agent algorithm option
                 elif self.ui.multiagent_radio.isChecked():
                     
-                    displayframe, actions = self.control_robot.run_multi_agent(displayframe, robot_list, arrivalthresh, self.tracker.pixel2um)   
+                    displayframe, actions = self.control_robot.run_multi_agent(robot_list, displayframe)   
                     self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions  
                     self.psi = np.radians(self.ui.psispinBox.value())
             

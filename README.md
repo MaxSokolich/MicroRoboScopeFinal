@@ -20,6 +20,10 @@ printed allowing others to build the device at a low cost.
 # Front End and Back End Software Architecture
 <img width="3093" height="5179" alt="SoftwareFrontendBackend" src="https://github.com/user-attachments/assets/67c889d3-efdc-421b-bcc5-777ba85ad2ea" />
 
+# COMSOL Mulitphysics Uniform and Gradient Magnetic Field Distrubution.
+![SI1](https://github.com/user-attachments/assets/0eefa44d-4017-4f68-a810-36fd01951a31)
+![SI3](https://github.com/user-attachments/assets/c57694b1-9929-461c-990b-a9fb59044d7f)
+
 
 # Example Control Algorithm:
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">

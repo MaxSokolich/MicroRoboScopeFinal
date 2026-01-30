@@ -231,14 +231,14 @@ class multi_agent_algorithm:
 
 
         if (dist_error < self.bot1_threshold) or (self.counter > 30):
-            self.counter = 0 
+
             self.node += 1
 
         
         self.prev_action = np.asarray(action, dtype=np.float32)
 
 
-        alpha = action[1] 
+        alpha = action[1] - np.pi
         gamma = np.pi/2   #disregard
         freq = math.ceil(action[0])
 

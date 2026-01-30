@@ -45,7 +45,7 @@ class multi_agent_algorithm:
 
         self.path, self.actions_chopped = None, None
 
-        self.bot1_threshold = 50
+        self.bot1_threshold = 50 #pixels
         self.num_alpha_bins = 4   # angles discretized into 4 bins
 
         self.init_flage = True
@@ -225,8 +225,23 @@ class multi_agent_algorithm:
         action, _ = self.model.predict(observation_error, deterministic=True)
         freq,alpha = self.discrete_to_continuous_action(action)
         # print("action =" , action)
-        print("freq = %.3f, alpha = %.3f" % (freq, alpha))
-        print("node = ", self.node)
+        action_text = "freq = {},alpha = {}".format(freq, alpha)
+        waypoint_text = "node = {}/{}".format(self.node, len(self.path))
+        cv2.putText(frame, action_text,
+                    (int(self.width / 1.8),int(self.height / 10)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1.5, 
+                    thickness=5,
+                    color = (0, 0, 0),
+                )
+        
+        cv2.putText(frame, waypoint_text,
+                    (int(self.width / 1.8),int(self.height / 8)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1.5, 
+                    thickness=5,
+                    color = (0, 0, 0),
+                )
 
     
 
@@ -234,9 +249,14 @@ class multi_agent_algorithm:
         dist_error = np.sqrt(error_bot1[0] ** 2 + error_bot1[1] ** 2)
 
 
-        if (dist_error < self.bot1_threshold) or (self.counter > 30):
+        if (dist_error < self.bot1_threshold) or (self.counter > 10):
             self.counter = 0
-            self.node += 1
+            if self.node < len(self.path)-1:
+                self.node += 1
+            
+       
+           
+
 
         
         self.prev_action = np.asarray(action, dtype=np.float32)

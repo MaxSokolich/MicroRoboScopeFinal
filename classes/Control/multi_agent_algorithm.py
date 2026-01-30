@@ -48,6 +48,7 @@ class multi_agent_algorithm:
         self.bot1_threshold = 50
         self.num_alpha_bins = 4   # angles discretized into 4 bins
 
+        self.init_flage = True
 
 
 
@@ -158,13 +159,14 @@ class multi_agent_algorithm:
             To be run at each frame of the camera feed thread/loop. Aproxx 24Hz
         """
         
-        if self.counter == 0:
+        if self.init_flage == True:
             p1 = robot_list[0].position_list[-1]  #robot1 start [x1, y1]
             p2 = robot_list[1].position_list[-1]  #robot2 start
 
             t1 = robot_list[0].trajectory[0]      #robot1 target
             t2 = robot_list[1].trajectory[0] 
             self.initilize_controller(p1,p2,t1,t2)
+            self.init_flage = False
 
 
 
@@ -231,7 +233,7 @@ class multi_agent_algorithm:
 
 
         if (dist_error < self.bot1_threshold) or (self.counter > 30):
-
+            self.counter = 0
             self.node += 1
 
         

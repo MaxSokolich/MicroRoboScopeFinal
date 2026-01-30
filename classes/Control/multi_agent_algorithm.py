@@ -166,6 +166,7 @@ class multi_agent_algorithm:
             t1 = robot_list[0].trajectory[0]      #robot1 target
             t2 = robot_list[1].trajectory[0] 
             self.initilize_controller(p1,p2,t1,t2)
+            
             self.init_flage = False
 
 
@@ -175,10 +176,10 @@ class multi_agent_algorithm:
         
        
         for i in range(len(self.opencv_um_path_robot1)):  
-            cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] / self.pix2metric), int(self.opencv_um_path_robot1[i,1]/ self.pix2metric)),2,(255,0,0), -1,)
+            cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] / self.pix2metric), int(self.opencv_um_path_robot1[i,1]/ self.pix2metric)),4,(255,0,0), -1,)
 
         for j in range(len(self.opencv_um_path_robot2)):  
-            cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] / self.pix2metric), int(self.opencv_um_path_robot2[j,1]/ self.pix2metric)),2,(0,165,255), -1,)
+            cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] / self.pix2metric), int(self.opencv_um_path_robot2[j,1]/ self.pix2metric)),4,(0,165,255), -1,)
 
 
 

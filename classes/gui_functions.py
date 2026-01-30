@@ -386,6 +386,10 @@ class MainWindow(QtWidgets.QMainWindow):
             del self.magnetic_field_list[:]
             del self.robots[:]
             del self.cells[:]
+        
+            #also reset algorithms
+            self.control_robot.reset()
+
             
     
 

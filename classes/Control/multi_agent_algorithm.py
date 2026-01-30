@@ -102,8 +102,15 @@ class multi_agent_algorithm:
         #final_configuration = np.array([10 ,-10.1 , 40.1 , 35.1])
 
         #mehdis um frame
-        self.path, self.actions_chopped = generate_reference_path(initial_configuration,final_configuration, plot = False)  #mehdis coordnate system, um
+        # self.path, self.actions_chopped = generate_reference_path(initial_configuration,final_configuration, plot = False)  #mehdis coordnate system, um
+        trajs = np.load('classes/Control/traj_fixed_dis10.npy', allow_pickle=True)
+        li = [(i,len(t)) for i, t in enumerate(trajs)]
+        ##sort by length
+        li.sort(key=lambda x: x[1])
 
+        traj_idx = li[150][0]  # or any index you want
+        selected_traj = np.array(trajs[traj_idx]) 
+        self.path = selected_traj - selected_traj[0]+initial_configuration
         print("path: ", self.path)
 
 

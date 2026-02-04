@@ -1384,10 +1384,10 @@ color: rgb(0,255,0);</string>
        <number>3</number>
       </property>
       <property name="mode">
-       <enum>QLCDNumber::Hex</enum>
+       <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Outline</enum>
+       <enum>QLCDNumber::Flat</enum>
       </property>
       <property name="value" stdset="0">
        <double>137.000000000000000</double>
@@ -1438,10 +1438,10 @@ color: rgb(0,255,0);</string>
        <number>3</number>
       </property>
       <property name="mode">
-       <enum>QLCDNumber::Hex</enum>
+       <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Outline</enum>
+       <enum>QLCDNumber::Flat</enum>
       </property>
       <property name="value" stdset="0">
        <double>20.000000000000000</double>
@@ -1455,6 +1455,9 @@ color: rgb(0,255,0);</string>
         <width>41</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0,0,0); 
@@ -1473,10 +1476,10 @@ color: rgb(0,255,0);</string>
        <number>3</number>
       </property>
       <property name="mode">
-       <enum>QLCDNumber::Hex</enum>
+       <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Outline</enum>
+       <enum>QLCDNumber::Flat</enum>
       </property>
       <property name="value" stdset="0">
        <double>17.100000000000001</double>
@@ -1565,10 +1568,10 @@ color: rgb(0,255,0);</string>
        <number>3</number>
       </property>
       <property name="mode">
-       <enum>QLCDNumber::Hex</enum>
+       <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Outline</enum>
+       <enum>QLCDNumber::Flat</enum>
       </property>
       <property name="value" stdset="0">
        <double>17.100000000000001</double>
@@ -2367,7 +2370,7 @@ Frequency (Hz):</string>
         <number>1</number>
        </property>
        <property name="maximum">
-        <number>400</number>
+        <number>1000</number>
        </property>
        <property name="value">
         <number>25</number>

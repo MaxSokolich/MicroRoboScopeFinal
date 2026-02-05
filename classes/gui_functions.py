@@ -674,7 +674,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.acceleration_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
                                      bot.area_list[-1]* (self.tracker.pixel2um**2),
-                                     bot.crop_length,
+                                     int(bot.crop_length* self.tracker.pixel2um),
                                      self.tracker.pixel2um,
                                      [[x * self.tracker.pixel2um, y * self.tracker.pixel2um] for x, y in bot.trajectory]
                                     ]
@@ -694,9 +694,12 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.velocity_list[-1][0]* self.tracker.pixel2um, 
                                      cell.velocity_list[-1][1]* self.tracker.pixel2um,
                                      cell.velocity_list[-1][2]* self.tracker.pixel2um,
+                                     cell.acceleration_list[-1][0]* self.tracker.pixel2um,
+                                     cell.acceleration_list[-1][1]* self.tracker.pixel2um,
+                                     cell.acceleration_list[-1][2]* self.tracker.pixel2um,
                                      cell.blur_list[-1],
                                      cell.area_list[-1]* (self.tracker.pixel2um**2),
-                                     cell.crop_length,
+                                     int(cell.crop_length* self.tracker.pixel2um),
                                      self.tracker.pixel2um
                                     ]
                 

@@ -90,6 +90,7 @@ def eventFilter(self, object, event):
                         cell.add_time(0)
                         cell.add_position([newx, newy])
                         cell.add_velocity([0, 0, 0])
+                        cell.add_acceleration([0, 0, 0])
                         cell.add_crop([x_1, y_1, w, h])
                         cell.add_area(0)
                         cell.add_blur(0)

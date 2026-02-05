@@ -408,14 +408,14 @@ class MainWindow(QtWidgets.QMainWindow):
             if len(self.tracker.robot_list)>0:
              
 
-
-                a = self.ui.infinity_size.value()  # Controls the size
+                a = 700 # controls the 
+                waypoints = self.ui.infinity_size.value()  # number of waypoints
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
 
                 # Generate points using parametric equations for a lemniscate
                 points = []
-                for t in np.linspace(0, 2 * np.pi, 500):
+                for t in np.linspace(0, 2 * np.pi, waypoints):
                     denom = 1 + np.sin(t)**2
                     if denom == 0:
                         continue  # avoid division by zero
@@ -674,6 +674,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.acceleration_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
                                      bot.area_list[-1]* (self.tracker.pixel2um**2),
+                                     bot.crop_length,
                                      self.tracker.pixel2um,
                                      [[x * self.tracker.pixel2um, y * self.tracker.pixel2um] for x, y in bot.trajectory]
                                     ]
@@ -695,6 +696,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.velocity_list[-1][2]* self.tracker.pixel2um,
                                      cell.blur_list[-1],
                                      cell.area_list[-1]* (self.tracker.pixel2um**2),
+                                     cell.crop_length,
                                      self.tracker.pixel2um
                                     ]
                 
@@ -719,14 +721,25 @@ class MainWindow(QtWidgets.QMainWindow):
                 sheet.append(cell[:-1])
         
 
-        #also update robot info
-        if len(self.robots) > 0:
-            area = self.robots[-1][11]
-            robot_diameter = round(np.sqrt(4*area/np.pi),1)
-            self.ui.vellcdnum.display(int(self.robots[-1][6]))
-            self.ui.blurlcdnum.display(int(self.robots[-1][10]))
-            self.ui.accellcdnum.display(int(self.robots[-1][9]))
-            self.ui.sizelcdnum.display(robot_diameter)
+        #also update robot  info display
+        if self.ui.robotmask_radio.isChecked():
+            if len(self.robots) > 0:
+                area = self.robots[-1][11]
+                robot_diameter = round(np.sqrt(4*area/np.pi),1)
+                self.ui.vellcdnum.display(int(self.robots[-1][6]))
+                self.ui.blurlcdnum.display(int(self.robots[-1][10]))
+                self.ui.accellcdnum.display(int(self.robots[-1][9]))
+                self.ui.sizelcdnum.display(robot_diameter)
+
+        #also update cell info to display
+        if self.ui.cellmask_radio.isChecked():
+            if len(self.cells) > 0:
+                area = self.cells[-1][11]
+                cell_diameter = round(np.sqrt(4*area/np.pi),1)
+                self.ui.vellcdnum.display(int(self.cells[-1][6]))
+                self.ui.blurlcdnum.display(int(self.cells[-1][10]))
+                self.ui.accellcdnum.display(int(self.cells[-1][9]))
+                self.ui.sizelcdnum.display(cell_diameter)
 
         
 ############################################################################################################################################################
@@ -894,14 +907,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame", "Time(s)", "Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Acc X (um/s2)", "Acc Y (um/s2)", "Acc Mag (um/s2)", "Blur", "Area (um^2)", "pixel2um","Path X (um)", "Path Y (um)"])
+            robot_sheet.append(["Frame", "Time(s)", "Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Acc X (um/s2)", "Acc Y (um/s2)", "Acc Mag (um/s2)", "Blur", "Area (um^2)","Crop Length (um)", "pixel2um","Path X (um)", "Path Y (um)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "pixel2um"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Crop Length (um)", "pixel2um"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
@@ -931,8 +944,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     for i in range(len((self.robot_params_sheets))):
                         for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=14).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=15).value = y
+                           
+                            self.robot_params_sheets[i].cell(row=idx+2, column=15).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = y
                 except Exception:
                     pass
             
@@ -1058,25 +1072,11 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.tracker is not None:
             if self.ui.autoacousticbutton.isChecked():
                 self.autoacousticstatus = True
-                self.ui.led.setStyleSheet("\n"
-"                background-color: rgb(0, 255, 0);\n"
-"                border-style: outset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 12px;\n"
-"                border-color: rgb(0, 255, 0);\n"
-"         \n"
-"                padding: 6px;")
+
             else:
                 self.autoacousticstatus = False
                 self.acoustic_frequency = 0
-                self.ui.led.setStyleSheet("\n"
-"                background-color: rgb(255, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 12px;\n"
-"                border-color: rgb(255, 0, 0);\n"
-"         \n"
-"                padding: 6px;")
+
                 
 
                 
@@ -1098,28 +1098,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.ui.applyacousticbutton.isChecked():
             self.ui.applyacousticbutton.setText("Stop")
             self.acoustic_frequency = self.ui.acousticfreq_spinBox.value()
-            self.ui.led.setStyleSheet("\n"
-"                background-color: rgb(0, 255, 0);\n"
-"                border-style: outset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 12px;\n"
-"                border-color: rgb(0, 255, 0);\n"
-"         \n"
-"                padding: 6px;")
+
         
         else:
             self.ui.applyacousticbutton.setText("Apply")
             #self.tbprint("Acoustic Module Off")
             self.acoustic_frequency = 0
-            self.ui.led.setStyleSheet("\n"
-"                background-color: rgb(255, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 12px;\n"
-"                border-color: rgb(255, 0, 0);\n"
-"         \n"
-"                padding: 6px;")
-            #self.apply_actions(False)
+  
        
         
 
@@ -1480,13 +1465,13 @@ class MainWindow(QtWidgets.QMainWindow):
         robotupper = self.ui.robotmaskupperbox.value()
         robotdilation = self.ui.robotmaskdilationbox.value() 
         robotmaskblur = self.ui.robotmaskblurbox.value()
-        robotcrop_length = self.ui.robotcroplengthbox.value()
+        robotcrop_length = self.ui.robotcroplengthbox.value()  #in micrometers
         
         celllower = self.ui.cellmasklowerbox.value() 
         cellupper = self.ui.cellmaskupperbox.value()
         celldilation = self.ui.cellmaskdilationbox.value() 
         cellmaskblur = self.ui.cellmaskblurbox.value()
-        cellcrop_length = self.ui.cellcroplengthbox.value()
+        cellcrop_length = self.ui.cellcroplengthbox.value() #in micrometers
 
 
 
@@ -1501,14 +1486,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tracker.robot_mask_upper = robotupper
             self.tracker.robot_mask_dilation = robotdilation
             self.tracker.robot_mask_blur = robotmaskblur
-            self.tracker.robot_crop_length = robotcrop_length
+            self.tracker.robot_crop_length = int(robotcrop_length / self.tracker.pixel2um) #convert crop length to pixels for the tracker algorithm  
             
     
             self.tracker.cell_mask_lower = celllower
             self.tracker.cell_mask_upper = cellupper
             self.tracker.cell_mask_dilation = celldilation
             self.tracker.cell_mask_blur = cellmaskblur
-            self.tracker.cell_crop_length = cellcrop_length
+            self.tracker.cell_crop_length = int(cellcrop_length / self.tracker.pixel2um)  #convert crop length to pixels for the tracker algorithm  
             
 
          

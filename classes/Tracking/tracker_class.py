@@ -43,7 +43,7 @@ class VideoThread(QThread):
         self.robot_mask_upper = 128
         self.robot_mask_dilation = 0  
         self.robot_mask_blur = 0
-        self.robot_crop_length = 40
+        self.robot_crop_length = 115
         self.robot_mask_flag = True
         self.robot_list = []
 
@@ -52,7 +52,7 @@ class VideoThread(QThread):
         self.cell_mask_upper = 128
         self.cell_mask_dilation = 0
         self.cell_mask_blur = 0
-        self.cell_crop_length = 40
+        self.cell_crop_length = 115
         self.cell_mask_flag = False
         self.cell_list = []
 
@@ -265,7 +265,7 @@ class VideoThread(QThread):
         else:
             recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
             croppedmask = np.zeros((310, 310, 3), dtype=np.uint8)
-        
+
         return croppedmask, recorded_cropped_frame
     
 

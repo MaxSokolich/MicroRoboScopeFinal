@@ -6,8 +6,8 @@ class pushing_algorithm:
 
         self.objective = 10
         self.pixel2um = 3.45 / self.objective
-        self.corridor_width = 100  # thicness of guiding corridor in pixels
-        self.corridor_width = 100 / self.pixel2um
+  
+        self.corridor_width = 10 / self.pixel2um    #thicness of guiding corridor in pixels
 
 
         self.approach_distance = 100

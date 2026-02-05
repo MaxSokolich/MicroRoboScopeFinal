@@ -57,10 +57,12 @@ def eventFilter(self, object, event):
 
                     if self.ui.robotmask_radio.isChecked():
                         # Create new robot instance
-                        x_1 = int(newx - self.ui.robotcroplengthbox.value() / 2)
-                        y_1 = int(newy - self.ui.robotcroplengthbox.value() / 2)
-                        w = self.ui.robotcroplengthbox.value()
-                        h = self.ui.robotcroplengthbox.value()
+                        robot_crop_length_in_pixels = int(self.ui.robotcroplengthbox.value()  / self.tracker.pixel2um)
+
+                        x_1 = int(newx - robot_crop_length_in_pixels / 2)
+                        y_1 = int(newy - robot_crop_length_in_pixels / 2)
+                        w = robot_crop_length_in_pixels
+                        h = robot_crop_length_in_pixels
 
                         robot = Robot()
                         robot.add_frame(self.frame_number)
@@ -71,15 +73,17 @@ def eventFilter(self, object, event):
                         robot.add_crop([x_1, y_1, w, h])
                         robot.add_area(0)
                         robot.add_blur(0)
-                        robot.crop_length = self.ui.robotcroplengthbox.value()
+                        robot.crop_length = robot_crop_length_in_pixels
                         self.tracker.robot_list.append(robot)
                     
                     elif self.ui.cellmask_radio.isChecked():
                         # Create new cell instance
-                        x_1 = int(newx - self.ui.cellcroplengthbox.value() / 2)
-                        y_1 = int(newy - self.ui.cellcroplengthbox.value() / 2)
-                        w = self.ui.cellcroplengthbox.value()
-                        h = self.ui.cellcroplengthbox.value()
+                        cell_crop_length_in_pixels = int(self.ui.cellcroplengthbox.value() / self.tracker.pixel2um)
+
+                        x_1 = int(newx - cell_crop_length_in_pixels / 2)
+                        y_1 = int(newy - cell_crop_length_in_pixels / 2)
+                        w = cell_crop_length_in_pixels
+                        h = cell_crop_length_in_pixels
 
                         cell = Cell()
                         cell.add_frame(self.frame_number)
@@ -89,7 +93,7 @@ def eventFilter(self, object, event):
                         cell.add_crop([x_1, y_1, w, h])
                         cell.add_area(0)
                         cell.add_blur(0)
-                        cell.crop_length = self.ui.cellcroplengthbox.value()
+                        cell.crop_length = cell_crop_length_in_pixels
                         self.tracker.cell_list.append(cell)
 
                 # Right click: Start drawing trajectory
@@ -193,11 +197,3 @@ def start(self):
             del self.magnetic_field_list[:]
 
             self.ui.applyacousticbutton.setChecked(False)
-            self.ui.led.setStyleSheet("""
-                background-color: rgb(255, 0, 0);
-                border-style: outset;
-                border-width: 3px;
-                border-radius: 12px;
-                border-color: rgb(255, 0, 0);
-                padding: 6px;
-            """)

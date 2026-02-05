@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1717</width>
-    <height>1027</height>
+    <height>1026</height>
    </rect>
   </property>
   <property name="font">
@@ -821,7 +821,7 @@ font-size: 10pt;</string>
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>91</width>
+        <width>101</width>
         <height>20</height>
        </rect>
       </property>
@@ -832,7 +832,7 @@ font-size: 10pt;</string>
        </size>
       </property>
       <property name="text">
-       <string>Crop Length(px)</string>
+       <string>Crop Length(um)</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="robotmaskblurbox">
@@ -1852,9 +1852,9 @@ font-size: 10pt;</string>
      <widget class="QPushButton" name="controlbutton">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>30</x>
         <y>40</y>
-        <width>111</width>
+        <width>211</width>
         <height>31</height>
        </rect>
       </property>
@@ -2019,54 +2019,6 @@ font-size: 10pt;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="initializebutton">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>40</y>
-        <width>111</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 255);
-                border-style: outset;
-                border-width: 3px;
-                border-radius: 10px;
-                border-color: rgb(0, 0, 255);
-                min-width: 1em;
-
-                font: bold 15px;
-            }
-      
-            QPushButton:checked {
-                color: rgb(255, 255, 255);
-                background-color: rgb(255, 0, 0);
-                border-style: inset;
-                border-width: 3px;
-                border-radius: 10px;
-                border-color: rgb(255, 0, 0);
-                font: bold 21px;
-                min-width: 1em;
-               
-            }
-            QPushButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border-color: rgb(0, 255, 0);
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>Initialize</string>
-      </property>
-      <property name="checkable">
-       <bool>false</bool>
-      </property>
-     </widget>
     </widget>
     <widget class="QLabel" name="magneticfieldsimlabel">
      <property name="geometry">
@@ -2142,106 +2094,43 @@ font-size: 10pt;</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="Control">
       <attribute name="title">
-       <string>Magnetic Control</string>
+       <string>Manual Control</string>
       </attribute>
-      <widget class="QRadioButton" name="rollradio">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>51</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Roll</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="swimradio">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>0</y>
-         <width>51</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Swim</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="orientradio">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>0</y>
-         <width>51</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Orient</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="pushradio">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>0</y>
-         <width>51</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Push</string>
-       </property>
-      </widget>
       <widget class="QCheckBox" name="gradient_status_checkbox">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>0</y>
-         <width>71</width>
+         <x>30</x>
+         <y>10</y>
+         <width>271</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
-        <string>Gradient</string>
+        <string>Gradient Status</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="equal_field_checkbox">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>20</y>
+         <x>30</x>
+         <y>30</y>
          <width>81</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
-        <string>Equal Field</string>
+        <string>Equal Field Status</string>
        </property>
       </widget>
       <widget class="QLabel" name="psilabel">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>180</y>
+         <x>70</x>
+         <y>60</y>
          <width>31</width>
          <height>21</height>
         </rect>
@@ -2253,8 +2142,8 @@ font-size: 10pt;</string>
       <widget class="QLabel" name="gammalabel">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>180</y>
+         <x>50</x>
+         <y>90</y>
          <width>51</width>
          <height>21</height>
         </rect>
@@ -2266,9 +2155,9 @@ font-size: 10pt;</string>
       <widget class="QSpinBox" name="alphaspinBox">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>180</y>
-         <width>61</width>
+         <x>120</x>
+         <y>120</y>
+         <width>71</width>
          <height>22</height>
         </rect>
        </property>
@@ -2282,8 +2171,8 @@ font-size: 10pt;</string>
       <widget class="QLabel" name="manualalphalabel">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>180</y>
+         <x>60</x>
+         <y>120</y>
          <width>41</width>
          <height>16</height>
         </rect>
@@ -2296,8 +2185,8 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>120</x>
-         <y>140</y>
-         <width>81</width>
+         <y>150</y>
+         <width>71</width>
          <height>31</height>
         </rect>
        </property>
@@ -2315,7 +2204,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
+         <y>140</y>
          <width>111</width>
          <height>41</height>
         </rect>
@@ -2328,9 +2217,9 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="gammaspinBox">
        <property name="geometry">
         <rect>
-         <x>180</x>
-         <y>180</y>
-         <width>61</width>
+         <x>120</x>
+         <y>90</y>
+         <width>71</width>
          <height>22</height>
         </rect>
        </property>
@@ -2344,9 +2233,9 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="psispinBox">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>180</y>
-         <width>61</width>
+         <x>120</x>
+         <y>60</y>
+         <width>71</width>
          <height>22</height>
         </rect>
        </property>
@@ -2357,168 +2246,11 @@ Frequency (Hz):</string>
         <number>90</number>
        </property>
       </widget>
-      <widget class="QSpinBox" name="arrivalthreshbox">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>20</y>
-         <width>51</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="value">
-        <number>25</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="arrivalthreshlabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>131</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Arrive Thresh (px):</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="corriderwidthlabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>121</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Corridor Width (um):</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="corridorwidthbox">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>50</y>
-         <width>51</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="value">
-        <number>10</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="approachdistancebox">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>80</y>
-         <width>51</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>400</number>
-       </property>
-       <property name="value">
-        <number>50</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="approachdistancelabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>121</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Approach Dist (px):</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="approachdistancelabel_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>121</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Spinning  (Hz):</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spinningfreqbox">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>110</y>
-         <width>51</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>10</number>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="ricochet_effect_checkbox">
-       <property name="geometry">
-        <rect>
-         <x>360</x>
-         <y>150</y>
-         <width>31</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="ricocheteffectlabel">
-       <property name="geometry">
-        <rect>
-         <x>250</x>
-         <y>150</y>
-         <width>101</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Ricochet Effect:</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>40</y>
+         <x>230</x>
+         <y>0</y>
          <width>81</width>
          <height>21</height>
         </rect>
@@ -2530,8 +2262,8 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldBx">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>60</y>
+         <x>250</x>
+         <y>20</y>
          <width>51</width>
          <height>25</height>
         </rect>
@@ -2549,8 +2281,8 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_7">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>60</y>
+         <x>210</x>
+         <y>20</y>
          <width>21</width>
          <height>21</height>
         </rect>
@@ -2562,8 +2294,8 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldBy">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>90</y>
+         <x>250</x>
+         <y>50</y>
          <width>51</width>
          <height>25</height>
         </rect>
@@ -2584,8 +2316,8 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_8">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>90</y>
+         <x>210</x>
+         <y>50</y>
          <width>21</width>
          <height>21</height>
         </rect>
@@ -2597,8 +2329,8 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldBz">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>120</y>
+         <x>250</x>
+         <y>80</y>
          <width>51</width>
          <height>25</height>
         </rect>
@@ -2619,8 +2351,8 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_9">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>120</y>
+         <x>210</x>
+         <y>80</y>
          <width>21</width>
          <height>21</height>
         </rect>
@@ -2632,8 +2364,8 @@ Frequency (Hz):</string>
       <widget class="QPushButton" name="manualapplybutton">
        <property name="geometry">
         <rect>
-         <x>330</x>
-         <y>70</y>
+         <x>320</x>
+         <y>30</y>
          <width>51</width>
          <height>61</height>
         </rect>
@@ -2673,55 +2405,13 @@ Frequency (Hz):</string>
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QRadioButton" name="multiagent_radio">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>0</y>
-         <width>51</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Multi 
-Agent</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Acoustic Control</string>
-      </attribute>
-      <widget class="QLabel" name="led">
-       <property name="geometry">
-        <rect>
-         <x>360</x>
-         <y>10</y>
-         <width>21</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-                background-color: rgb(255, 0, 0);
-                border-style: outset;
-                border-width: 3px;
-                border-radius: 12px;
-                border-color: rgb(255, 0, 0);
-         
-                padding: 6px;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QPushButton" name="applyacousticbutton">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>10</y>
-         <width>71</width>
-         <height>21</height>
+         <x>330</x>
+         <y>130</y>
+         <width>41</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2759,11 +2449,28 @@ Agent</string>
         <bool>true</bool>
        </property>
       </widget>
+      <widget class="QLabel" name="acousticfreqlabel">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>120</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Acoustic 
+Frequency (Hz)</string>
+       </property>
+      </widget>
       <widget class="QSpinBox" name="acousticfreq_spinBox">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>10</y>
+         <x>270</x>
+         <y>170</y>
          <width>91</width>
          <height>31</height>
         </rect>
@@ -2778,13 +2485,383 @@ Agent</string>
         <number>1000000</number>
        </property>
       </widget>
+     </widget>
+     <widget class="QWidget" name="Algorithms">
+      <attribute name="title">
+       <string>Control Algorithms</string>
+      </attribute>
+      <widget class="QTabWidget" name="tabWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>70</y>
+         <width>381</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Simple Roll</string>
+        </attribute>
+        <widget class="QRadioButton" name="rollradio">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>51</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Roll</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>0</y>
+           <width>311</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>This Algorithm simple applies a rotating
+ magnetic field that results in rolling motion 
+towards a target coordinate or along a path 
+ generated in the &quot;path planning&quot; tab. 
+&quot;Arrive Thresh&quot; indictes a threshold distance
+ in pixels. </string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Simple Swim</string>
+        </attribute>
+        <widget class="QRadioButton" name="swimradio">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>51</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Swim</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_5">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>0</y>
+           <width>311</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>This Algorithm simple applies a rotating
+ magnetic field that results in a swimming motion 
+towards a target coordinate or along a path 
+ generated in the &quot;path planning&quot; tab. 
+&quot;Arrive Thresh&quot; indictes a threshold distance
+ in pixels. </string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Simple Orient</string>
+        </attribute>
+        <widget class="QRadioButton" name="orientradio">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Orient</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_13">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>20</y>
+           <width>311</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>This Algorithm autonmously adjusts the direction 
+ of the uniform magnetic field based on the velocty 
+ of the microrobot. 
+ Essentailly. it learns the direction of the field to 
+ apply to guide a self-propelled MR to a target coord.</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_6">
+        <attribute name="title">
+         <string>Ricochet</string>
+        </attribute>
+        <widget class="QCheckBox" name="ricochet_effect_checkbox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="ricocheteffectlabel">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>10</y>
+           <width>101</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Ricochet Effect:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_4">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>20</y>
+           <width>251</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>This Algorithm simply enables a condition
+ that bounces a microrobot off the walls 
+ of the image frame. </string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_4">
+        <attribute name="title">
+         <string>Auto Push</string>
+        </attribute>
+        <widget class="QRadioButton" name="pushradio">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>51</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Push</string>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="spinningfreqbox">
+         <property name="geometry">
+          <rect>
+           <x>300</x>
+           <y>70</y>
+           <width>51</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="approachdistancelabel">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>40</y>
+           <width>121</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Approach Dist (px):</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="approachdistancelabel_2">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>70</y>
+           <width>121</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Spinning  (Hz):</string>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="approachdistancebox">
+         <property name="geometry">
+          <rect>
+           <x>300</x>
+           <y>40</y>
+           <width>51</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>400</number>
+         </property>
+         <property name="value">
+          <number>50</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="corriderwidthlabel">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>10</y>
+           <width>121</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Corridor Width (um):</string>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="corridorwidthbox">
+         <property name="geometry">
+          <rect>
+           <x>300</x>
+           <y>10</y>
+           <width>51</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_14">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>151</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>This is an autonmosly 
+ pushing algorithm based
+ on micro vortices
+ and guiding corridors</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="MultiAgent">
+        <attribute name="title">
+         <string>MultiAgent</string>
+        </attribute>
+        <widget class="QRadioButton" name="multiagent_radio">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>0</y>
+           <width>101</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Multi Agent</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_5">
+        <attribute name="title">
+         <string>MPC Roll</string>
+        </attribute>
+       </widget>
+      </widget>
+      <widget class="QSpinBox" name="arrivalthreshbox">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>40</y>
+         <width>51</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="value">
+        <number>25</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="arrivalthreshlabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Arrive Thresh (px):</string>
+       </property>
+      </widget>
       <widget class="QPushButton" name="autoacousticbutton">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>10</y>
-         <width>71</width>
-         <height>21</height>
+         <x>330</x>
+         <y>30</y>
+         <width>51</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2822,33 +2899,42 @@ Agent</string>
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QLabel" name="acousticfreqlabel">
+      <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>91</width>
-         <height>41</height>
+         <width>371</width>
+         <height>16</height>
         </rect>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
+       <property name="text">
+        <string>Algorithms begin by selecting the &quot;Control&quot; button above</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>40</y>
+         <width>121</width>
+         <height>16</height>
+        </rect>
        </property>
        <property name="text">
-        <string>Acoustic 
-Frequency (Hz)</string>
+        <string>Acoustic Freq Finder:</string>
        </property>
       </widget>
      </widget>
      <widget class="QWidget" name="Planning">
       <attribute name="title">
-       <string>Planning</string>
+       <string>Path Planning</string>
       </attribute>
       <widget class="QPushButton" name="make_inf_path">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>10</y>
+         <x>50</x>
+         <y>40</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -2884,8 +2970,8 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="infinity_size">
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>10</y>
+         <x>220</x>
+         <y>40</y>
          <width>61</width>
          <height>21</height>
         </rect>
@@ -2894,20 +2980,20 @@ Frequency (Hz)</string>
         <number>1</number>
        </property>
        <property name="maximum">
-        <number>1000</number>
+        <number>100</number>
        </property>
        <property name="singleStep">
         <number>100</number>
        </property>
        <property name="value">
-        <number>1000</number>
+        <number>50</number>
        </property>
       </widget>
       <widget class="QRadioButton" name="RRTradio">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>60</y>
+         <x>80</x>
+         <y>110</y>
          <width>71</width>
          <height>20</height>
         </rect>
@@ -2919,8 +3005,8 @@ Frequency (Hz)</string>
       <widget class="QRadioButton" name="drawradio">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>60</y>
+         <x>80</x>
+         <y>180</y>
          <width>71</width>
          <height>20</height>
         </rect>
@@ -2935,8 +3021,8 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="RRTtreesizebox">
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>60</y>
+         <x>290</x>
+         <y>110</y>
          <width>51</width>
          <height>21</height>
         </rect>
@@ -2954,8 +3040,8 @@ Frequency (Hz)</string>
       <widget class="QLabel" name="RRTtreesizelabel_2">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>80</y>
+         <x>170</x>
+         <y>110</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -2964,13 +3050,80 @@ Frequency (Hz)</string>
         <string>RRT Tree Size (px):</string>
        </property>
       </widget>
+      <widget class="QLabel" name="with_2">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>40</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>waypoints</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="with_3">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>251</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1) Generate Infinity Path </string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="with_4">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>371</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>2)  Use RRT algorithm by clicking with the right mouse button. 
+Use the Cell Mask to ensure obstacles are outlined in white</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="with_5">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>140</y>
+         <width>371</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>3) Draw Path. The program will continously add waypoints every
+ frame as long as the right mouse button is pressed</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="with_6">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>40</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>with</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>19</x>
-       <y>369</y>
+       <x>10</x>
+       <y>370</y>
        <width>371</width>
        <height>251</height>
       </rect>

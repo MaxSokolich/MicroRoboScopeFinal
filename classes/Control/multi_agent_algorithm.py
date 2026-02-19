@@ -108,7 +108,7 @@ class multi_agent_algorithm:
         ##sort by length
         li.sort(key=lambda x: x[1])
 
-        traj_idx = li[150][0]  # or any index you want
+        traj_idx = li[10][0]  # or any index you want
         selected_traj = np.array(trajs[traj_idx]) 
         self.path = selected_traj - selected_traj[0]+initial_configuration
         print("path: ", self.path)

@@ -182,11 +182,11 @@ class multi_agent_algorithm:
 
 
         #robot data in opencv/um
-        robot1_x = robot_list[0].position_list[-1][0] * self.pix2metric #um
-        robot1_y = robot_list[0].position_list[-1][1] * self.pix2metric #um
+        robot1_x = robot_list[0].position_list[-1][0]  #pixel
+        robot1_y = robot_list[0].position_list[-1][1]  #pixel
 
-        robot2_x = robot_list[1].position_list[-1][0] * self.pix2metric #um
-        robot2_y = robot_list[1].position_list[-1][1] * self.pix2metric #um
+        robot2_x = robot_list[1].position_list[-1][0]  #pixel
+        robot2_y = robot_list[1].position_list[-1][1]  #pixel
 
         # robot data in mehdi/um
         robot1_x, robot1_y = self.myMapper.pixel_to_xy(robot1_x, robot1_y)

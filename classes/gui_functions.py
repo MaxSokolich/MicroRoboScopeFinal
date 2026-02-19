@@ -473,6 +473,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if len(robot_list)>0:
                 #orient algorithm option
                 if self.ui.orientradio.isChecked():
+                    self.tbprint("Orient Algorithm Activated")
                     displayframe, actions, stopped = self.control_robot.run_orient(displayframe, robot_list, arrivalthresh)
                     self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions   
                     #this is the auto acoustic opticmal frequency finder algorithm i designed
@@ -485,6 +486,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 #roll algorithm option
                 elif self.ui.rollradio.isChecked():
+                    self.tbprint("Rolling Algorithm Activated")
                     displayframe, actions, stopped = self.control_robot.run_roll(displayframe, robot_list, arrivalthresh)
                     self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
                     
@@ -497,6 +499,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     
                 #pushing algorithm option
                 elif self.ui.pushradio.isChecked():
+                    self.tbprint("Pushing Algorithm Activated")
                     corridor_width = self.ui.corridorwidthbox.value()
                     approach_distance = self.ui.approachdistancebox.value()
                     spinning_freq = self.ui.spinningfreqbox.value()
@@ -509,8 +512,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                 #multi agent algorithm option
                 elif self.ui.multiagent_radio.isChecked():
+                    self.tbprint("MultiAgent Algorithm Activated")
                     
-                    displayframe, actions = self.control_robot.run_multi_agent(robot_list, displayframe)   
+                    displayframe, actions = self.control_robot.run_multi_agent(robot_list, displayframe) 
+              
                     self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions  
                     self.psi = np.radians(self.ui.psispinBox.value())
             
@@ -834,9 +839,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # and record the actions by appending the field_list
         
         if self.freq > 0:
+        
             if self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked() or self.ui.multiagent_radio.isChecked():
                 self.alpha = self.alpha + np.pi/2
-
+     
         #zero output
         if status == False:
             self.manual_status = False

@@ -45,7 +45,7 @@ class multi_agent_algorithm:
 
         self.path, self.actions_chopped = None, None
 
-        self.bot1_threshold = 50 #pixels
+        self.bot1_threshold = 10 #pixels
         self.num_alpha_bins = 4   # angles discretized into 4 bins
 
         self.init_flage = True
@@ -104,12 +104,12 @@ class multi_agent_algorithm:
 
         #mehdis um frame
         # self.path, self.actions_chopped = generate_reference_path(initial_configuration,final_configuration, plot = False)  #mehdis coordnate system, um
-        trajs = np.load('classes/Control/traj_fixed_dis10.npy', allow_pickle=True)
+        trajs = np.load(r'classes\Control\mlp\toMax\traj.npy', allow_pickle=True)
         li = [(i,len(t)) for i, t in enumerate(trajs)]
         ##sort by length
         li.sort(key=lambda x: x[1])
 
-        traj_idx = li[100][0]  # or any index you want
+        traj_idx = li[200][0]  # or any index you want
         selected_traj = np.array(trajs[traj_idx]) 
         selected_traj = selected_traj[5:, :]
         self.path = selected_traj - selected_traj[0]+initial_configuration
@@ -159,7 +159,7 @@ class multi_agent_algorithm:
 
             To be run at each frame of the camera feed thread/loop. Aproxx 24Hz
         """
-        
+ 
         if self.init_flage == True:
             p1 = robot_list[0].position_list[-1]  #robot1 start [x1, y1]
             p2 = robot_list[1].position_list[-1]  #robot2 start
@@ -177,17 +177,10 @@ class multi_agent_algorithm:
         
        
         for i in range(len(self.opencv_um_path_robot1)):  
-<<<<<<< HEAD
-            cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] / self.pix2metric), int(self.opencv_um_path_robot1[i,1]/ self.pix2metric)),4,(255,0,0), -1,)
-
-        for j in range(len(self.opencv_um_path_robot2)):  
-            cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] / self.pix2metric), int(self.opencv_um_path_robot2[j,1]/ self.pix2metric)),4,(0,165,255), -1,)
-=======
             cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] ), int(self.opencv_um_path_robot1[i,1])),2,(255,0,0), -1,)
 
         for j in range(len(self.opencv_um_path_robot2)):  
             cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] ), int(self.opencv_um_path_robot2[j,1])),2,(0,165,255), -1,)
->>>>>>> 80741c9... removed pixel2meter for policy
 
 
 
@@ -269,7 +262,7 @@ class multi_agent_algorithm:
         self.prev_action = np.asarray(action, dtype=np.float32)
 
 
-        alpha = action[1] - np.pi
+        alpha = action[1] 
         gamma = np.pi/2   #disregard
         freq = math.ceil(action[0])
 

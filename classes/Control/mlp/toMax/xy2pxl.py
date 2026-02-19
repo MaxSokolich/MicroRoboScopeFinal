@@ -45,9 +45,9 @@ class CoordinateMapper:
             tuple: (x_xy, y_xy) coordinates in x-y plane
         """
         # Translate to center and scale
-        x_xy = (x_pixel - self.center_x_pixel) / self.scale_x
+        x_xy = (x_pixel - self.center_x_pixel) 
         # Flip Y axis (pixel Y increases downward, x-y Y increases upward)
-        y_xy = (self.center_y_pixel - y_pixel) / self.scale_y
+        y_xy = (self.center_y_pixel - y_pixel)
         
         return x_xy, y_xy
     
@@ -63,9 +63,9 @@ class CoordinateMapper:
             tuple: (x_pixel, y_pixel) coordinates in pixel space
         """
         # Scale and translate from center
-        x_pixel = x_xy * self.scale_x + self.center_x_pixel
+        x_pixel = x_xy + self.center_x_pixel
         # Flip Y axis (x-y Y increases upward, pixel Y increases downward)
-        y_pixel = self.center_y_pixel - y_xy * self.scale_y
+        y_pixel = self.center_y_pixel - y_xy
         
         return x_pixel, y_pixel
     
@@ -100,8 +100,8 @@ class CoordinateMapper:
         xy_coords = np.array(xy_coords)
         pixel_coords = np.zeros_like(xy_coords, dtype=float)
         
-        pixel_coords[:, 0] = xy_coords[:, 0] * self.scale_x + self.center_x_pixel
-        pixel_coords[:, 1] = self.center_y_pixel - xy_coords[:, 1] * self.scale_y
+        pixel_coords[:, 0] = xy_coords[:, 0] + self.center_x_pixel
+        pixel_coords[:, 1] = self.center_y_pixel - xy_coords[:, 1] 
         
         return pixel_coords
 

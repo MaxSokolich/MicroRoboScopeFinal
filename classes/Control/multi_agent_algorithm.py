@@ -45,7 +45,7 @@ class multi_agent_algorithm:
 
         self.path, self.actions_chopped = None, None
 
-        self.bot1_threshold = 10 #pixels
+        self.threshold = 10 #pixels
         self.num_alpha_bins = 4   # angles discretized into 4 bins
 
         self.init_flage = True
@@ -109,12 +109,15 @@ class multi_agent_algorithm:
         ##sort by length
         li.sort(key=lambda x: x[1])
 
-        traj_idx = li[200][0]  # or any index you want
-        selected_traj = np.array(trajs[traj_idx]) 
-        selected_traj = selected_traj[5:, :]
+        traj_idx = li[300][0] # or any index you want
+        selected_traj = np.array(trajs[traj_idx]) # shape (T, 4)
+        selected_traj = selected_traj[25:95,:]
         self.path = selected_traj - selected_traj[0]+initial_configuration
         print("path: ", self.path)
 
+
+
+        
 
         #mehdis um frame ---> opencv um frame
         self.opencv_um_path_robot1 = self.myMapper.xy_to_pixel_batch(self.path[:,0:2])
@@ -159,6 +162,7 @@ class multi_agent_algorithm:
 
             To be run at each frame of the camera feed thread/loop. Aproxx 24Hz
         """
+        print("   \n\n")
  
         if self.init_flage == True:
             p1 = robot_list[0].position_list[-1]  #robot1 start [x1, y1]
@@ -177,10 +181,10 @@ class multi_agent_algorithm:
         
        
         for i in range(len(self.opencv_um_path_robot1)):  
-            cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] ), int(self.opencv_um_path_robot1[i,1])),2,(255,0,0), -1,)
+            cv2.circle(frame,(int(self.opencv_um_path_robot1[i,0] ), int(self.opencv_um_path_robot1[i,1])),7,(155,0,0), -1,)
 
         for j in range(len(self.opencv_um_path_robot2)):  
-            cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] ), int(self.opencv_um_path_robot2[j,1])),2,(0,165,255), -1,)
+            cv2.circle(frame,(int(self.opencv_um_path_robot2[j,0] ), int(self.opencv_um_path_robot2[j,1])),7,(0,0,155), -1,)
 
 
 
@@ -191,7 +195,13 @@ class multi_agent_algorithm:
 
         robot2_x = robot_list[1].position_list[-1][0]  #pixel
         robot2_y = robot_list[1].position_list[-1][1]  #pixel
+        print("timestamp:", time.time()- self.start)
 
+        print("robot1 pos:", robot_list[0].position_list[-1])
+        print("robot2 pos:", robot_list[1].position_list[-1])
+
+        print("robot1 vel:", robot_list[0].velocity_list[-1])
+        print("robot2 vel:", robot_list[1].velocity_list[-1])
         # robot data in mehdi/um
         robot1_x, robot1_y = self.myMapper.pixel_to_xy(robot1_x, robot1_y)
         robot2_x, robot2_y = self.myMapper.pixel_to_xy(robot2_x, robot2_y)
@@ -199,12 +209,14 @@ class multi_agent_algorithm:
 
 
         #mehids um coordinate system
-        bot1_target_x = self.path[self.node,0] 
+        bot1_target_x = self.path[self.node,0] #try to safe
         bot1_target_y = self.path[self.node,1]
+
+
         
         # plotting target position node for robot 2
         bot1_target_x_opencv, bot1_target_y_opencv = self.myMapper.xy_to_pixel(bot1_target_x, bot1_target_y)
-        cv2.circle(frame,(int(bot1_target_x_opencv), int(bot1_target_y_opencv)),10,(255,0,0), -1,)
+        cv2.circle(frame,(int(bot1_target_x_opencv), int(bot1_target_y_opencv)),14,(0,0,0), -1,)
 
 
         bot2_target_x = self.path[self.node,2]
@@ -212,7 +224,7 @@ class multi_agent_algorithm:
 
         # plotting target position node for robot 2
         bot2_target_x_opencv, bot2_target_y_opencv = self.myMapper.xy_to_pixel(bot2_target_x, bot2_target_y)
-        cv2.circle(frame,(int(bot2_target_x_opencv), int(bot2_target_y_opencv)),10,(255,0,0), -1,)
+        cv2.circle(frame,(int(bot2_target_x_opencv), int(bot2_target_y_opencv)),14,(0,0,0), -1,)
 
 
          #calculate error between node and robot in mehdi/um
@@ -222,10 +234,14 @@ class multi_agent_algorithm:
         observation_error[0, :2] = error_bot1
         observation_error[1, :2] = error_bot2
         observation_error[:, 2:] = self.prev_action
+        print("observation error:",observation_error)
+        
+
         action, _ = self.model.predict(observation_error, deterministic=True)
-        freq,alpha = self.discrete_to_continuous_action(action)
+        freq, alpha = self.discrete_to_continuous_action(action)
         # print("action =" , action)
         action_text = "freq = {},alpha = {}".format(freq, alpha)
+        print(action_text)
         waypoint_text = "node = {}/{}".format(self.node, len(self.path))
         cv2.putText(frame, action_text,
                     (int(self.width / 1.8),int(self.height / 10)),
@@ -250,15 +266,12 @@ class multi_agent_algorithm:
         print("dist_error = ", dist_error)
 
 
-        if (dist_error < self.bot1_threshold) or (self.counter > 10):
+        if (dist_error < self.threshold) or (self.counter > 10):
             self.counter = 0
-            if (dist_error < self.bot1_threshold):
-                print('reached to ', self.node, 'th node')
-            if self.counter > 10:
-                print('max iterations reached ', self.node, 'th node')
+            
             if self.node < len(self.path)-1:
                 self.node += 1
-                print("node = ", self.node)
+                
             
        
            
@@ -268,9 +281,10 @@ class multi_agent_algorithm:
         self.prev_action = np.asarray(action, dtype=np.float32)
 
 
-        alpha = action[1] 
+        #alpha = action[1] 
+        
         gamma = np.pi/2   #disregard
-        freq = math.ceil(action[0])
+        freq = math.ceil(freq)
 
 
         return frame, alpha, gamma, freq

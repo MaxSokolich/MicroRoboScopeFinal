@@ -104,14 +104,14 @@ class multi_agent_algorithm:
 
         #mehdis um frame
         # self.path, self.actions_chopped = generate_reference_path(initial_configuration,final_configuration, plot = False)  #mehdis coordnate system, um
-        trajs = np.load(r'classes\Control\mlp\toMax\traj.npy', allow_pickle=True)
+        trajs = np.load(r'classes\Control\mlp\toMax\traj_HIL_data3.npy', allow_pickle=True)
         li = [(i,len(t)) for i, t in enumerate(trajs)]
         ##sort by length
         li.sort(key=lambda x: x[1])
 
-        traj_idx = li[300][0] # or any index you want
+        traj_idx = li[27][0] # or any index you want
         selected_traj = np.array(trajs[traj_idx]) # shape (T, 4)
-        selected_traj = selected_traj[25:95,:]
+        #selected_traj = selected_traj[:,:]
         self.path = selected_traj - selected_traj[0]+initial_configuration
         print("path: ", self.path)
 
@@ -168,8 +168,8 @@ class multi_agent_algorithm:
             p1 = robot_list[0].position_list[-1]  #robot1 start [x1, y1]
             p2 = robot_list[1].position_list[-1]  #robot2 start
 
-            t1 = robot_list[0].trajectory[0]      #robot1 target
-            t2 = robot_list[1].trajectory[0] 
+            t1 = [0,0]#robot_list[0].trajectory[0]      #robot1 target
+            t2 = [0,0]#robot_list[1].trajectory[0] 
             self.initilize_controller(p1,p2,t1,t2)
             
             self.init_flage = False

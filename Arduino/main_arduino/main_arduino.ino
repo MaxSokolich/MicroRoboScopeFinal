@@ -46,7 +46,7 @@ float equal_field_status;
 float acoustic_frequency;
 
 int phase = 0;   // Phase accumulator for the AD9850 (unused but required by DDS library)
-
+static uint32_t lastSend = 0;  // initilize lastsend variable for throttling send rate back to python
 
 // ================================================================
 //  FIELD COMPONENT STORAGE (Intermediate computations)
@@ -245,6 +245,9 @@ void setup()
   //  Each coil has two PWM pins (PWMR/PWML) controlling H-bridge legs
   //  and two enable lines (ENR/ENL).
   // ================================================================
+
+  pinMode(49, OUTPUT); // used to measure the loop frequency using osscislscope
+
 
   // ---- Coil 1 (+Y) ----
   pinMode(Coil1_PWMR, OUTPUT);
@@ -503,6 +506,7 @@ void set6(float DC6){
 
 void loop()
 {
+  digitalWrite(49, HIGH);  // for testing loop time and frequency of the code. will measure the time to to go low on this pin with an oscilloscope. 
     // ================================================================
     // RECEIVE DATA FROM PYTHON OVER SERIALTRANSFER
     // ================================================================
@@ -703,31 +707,32 @@ void loop()
         set6(-Bz_final);
     }
 
+  
     // ================================================================
-    // READ ALL SIX COIL CURRENTS (ACS712 5A sensors)
-    // Multiply each reading by dirN to recover signed current direction
-    // ================================================================
-    Current_Data.Coil1_current = readCurrentFast(A0) * dir1;
-    Current_Data.Coil2_current = readCurrentFast(A1) * dir2;
-    Current_Data.Coil3_current = readCurrentFast(A2) * dir3;
-    Current_Data.Coil4_current = readCurrentFast(A3) * dir4;
-    Current_Data.Coil5_current = readCurrentFast(A4) * dir5;
-    Current_Data.Coil6_current = readCurrentFast(A5) * dir6;
-
-
-
-    // ================================================================
-    // SEND CURRENT DATA BACK TO PYTHON
+    // READ AND SEND CURRENT DATA BACK TO PYTHON (ACS712 5A sensors)
     // Sent as a SerialTransfer struct (float × 6)
-    //throttle the transfer rate so it doesnt overflow python. python can only read the data so fast. must be slower than the pyqt5 timer refresh rate
+    // throttle the transfer rate so it doesnt overflow python. python can only read the data so fast. must be slower than the pyqt5 timer refresh rate
+    // also realizing there is no point reading the current data every loop if im not sending it to python AKA using it. its too slow otherwise
     // ================================================================
-    static uint32_t lastSend = 0;
+    
     if (millis() - lastSend >= 20) {  // 20 ms -> 50 Hz
         lastSend = millis();
+
+        // Multiply each reading by dirN to recover signed current direction
+        Current_Data.Coil1_current = readCurrentFast(A0) * dir1;
+        Current_Data.Coil2_current = readCurrentFast(A1) * dir2;
+        Current_Data.Coil3_current = readCurrentFast(A2) * dir3;
+        Current_Data.Coil4_current = readCurrentFast(A3) * dir4;
+        Current_Data.Coil5_current = readCurrentFast(A4) * dir5;
+        Current_Data.Coil6_current = readCurrentFast(A5) * dir6;
+
+
     
         uint16_t sendSize = 0;
         sendSize = myTransfer.txObj(Current_Data, sendSize);
         myTransfer.sendData(sendSize);
         //Serial.print("sent to python"); Serial.print(" ");
 }
+
+digitalWrite(49, LOW);  // for testing loop time and frequency of the code. will measure the time between Low and High on this pin with an oscilloscope. 
 }

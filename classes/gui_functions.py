@@ -752,8 +752,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Updates the image_label with a new opencv image"""
         if self.ui.toggledisplayvisualscheckbox.isChecked():
             if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
-                print(self.alpha)
-                print(np.degrees(self.alpha))
+   
                 rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
                 uniformfield = "Bx: {:.2f}, By: {:.2f}, Bz: {:.2f}".format(self.Bx, self.By, self.Bz)
 

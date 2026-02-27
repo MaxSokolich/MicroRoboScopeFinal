@@ -61,9 +61,11 @@ class ArduinoHandler:
 
         if self._link is None:
             return None
+        
+        latest_currents = None
 
-
-        if self._link.available(): 
+        while self._link.available():
+        
             idx = 0
             currents = []
 
@@ -72,11 +74,10 @@ class ArduinoHandler:
                 idx += 4
                 currents.append(val)
 
-            
-            return currents
+            latest_currents = currents 
+      
         
-        
-        return None
+        return latest_currents
 
 
 

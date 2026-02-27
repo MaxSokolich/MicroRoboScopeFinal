@@ -32,6 +32,7 @@ from os.path import expanduser
 import openpyxl 
 import pandas as pd
 from datetime import datetime
+from collections import deque
 import sys
 import numpy as np
 import cv2
@@ -221,7 +222,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.arduino_receive_timer = QTimer(self)
         self.arduino_receive_timer.timeout.connect(self.read_receive_arduino)
-        self.arduino_receive_timer.start(15)   #15msec timer to read arduino data. must be faster than the rate at which arduino sends data
+        self.arduino_receive_timer.start(15)#15msec timer to read arduino data. must be faster than the rate at which arduino sends data
         self.coil1_current = 0
         self.coil2_current = 0
         self.coil3_current = 0
@@ -319,7 +320,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Buffers for plotting (store last N samples)
         self.max_points = 200  # history length like Arduino serial plotter
-        self.data_buffers = [[0] * self.max_points for _ in range(6)]
+        #self.data_buffers = [[0] * self.max_points for _ in range(6)]
+        self.data_buffers = [deque([0.0] * self.max_points, maxlen=self.max_points) for _ in range(6)]
         self.curves = []
 
         colors = ['#A52A2A',"#A50DA5", '#008000', '#0000FF', "#9E9E00", '#FFA500']  # brown, blue, green, yellow, orange, purple
@@ -338,29 +340,36 @@ class MainWindow(QtWidgets.QMainWindow):
         """
 
         # Update coil currents from receiver
-        if self.arduino_handler is not None:
+        if self.arduino_handler is None:
+            return
+
+        new_data_received = False
+        
+        # DRAIN THE BUFFER: Process every packet waiting in the serial queue
+        # This prevents the "joystick lag" by jumping to the latest data
+        while True:
             currents = self.arduino_handler.receive()
-            if isinstance(currents, (list, tuple)) and len(currents) >= 6:
-                try:
+            if currents is None:
+                break  # No more packets waiting
+            
+            new_data_received = True
+            # Update our deques with the new values
+            for i in range(6):
+                self.data_buffers[i].append(currents[i])
+                
+            # Optional: Save every packet to your sheet here if logging is critical
+            if self.save_status:
+                row = [time.time() - self.starttime] + currents
+                self.sensor_sheet.append(row)
 
-                    self.coil1_current = round(float(currents[0]),2)
-                    self.coil2_current = round(float(currents[1]),2)
-                    self.coil3_current = round(float(currents[2]),2)
-                    self.coil4_current = round(float(currents[3]),2)
-                    self.coil5_current = round(float(currents[4]),2)
-                    self.coil6_current = round(float(currents[5]),2)
-                    
-                    for i in range(6):
-                        self.data_buffers[i].append(currents[i])
-                        self.data_buffers[i] = self.data_buffers[i][-self.max_points:]  # keep last N points
-                        self.curves[i].setData(self.data_buffers[i])
-
-                except Exception as e:
-                    self.tbprint("Error updating coil currents: {}".format(e))
-
-        if self.save_status == True:
-            self.sensor_values = [time.time()-self.starttime, self.coil1_current, self.coil2_current, self.coil3_current, self.coil4_current, self.coil5_current, self.coil6_current]
-            self.sensor_sheet.append(self.sensor_values)
+        # REFRESH GUI: Only redraw the graph IF we actually got new data
+        if new_data_received:
+            for i in range(6):
+                # pyqtgraph is optimized to handle deques/lists efficiently here
+                self.curves[i].setData(self.data_buffers[i])
+                
+            # Update your coil variables for other parts of the app
+            self.coil1_current = round(self.data_buffers[0][-1], 2)
 
 
 

@@ -724,8 +724,6 @@ class MainWindow(QtWidgets.QMainWindow):
        
         self.magnetic_field_list.append(self.actions)
         
-        
-        
 
         #IF SAVE STATUS THEN CONTINOUSLY SAVE THE CURRENT ROBOT PARAMS AND MAGNETIC FIELD PARAMS TO AN EXCEL ROWS
         if self.save_status == True:

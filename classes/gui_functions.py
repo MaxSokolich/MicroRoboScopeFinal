@@ -560,9 +560,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         elif self.manual_status == True:
-            self.Bx = self.ui.manualfieldBx.value()/100
-            self.By = self.ui.manualfieldBy.value()/100
-            self.Bz = self.ui.manualfieldBz.value()/100
+            self.coil1_manual = self.ui.manualfieldCoil1.value()/100
+            self.coil2_manual = self.ui.manualfieldCoil2.value()/100
+            self.coil3_manual = self.ui.manualfieldCoil3.value()/100
+            self.coil4_manual = self.ui.manualfieldCoil4.value()/100
+            self.coil5_manual = self.ui.manualfieldCoil5.value()/100
+            self.coil6_manual = self.ui.manualfieldCoil6.value()/100
             
             """# X coil calibration
             if self.ui.manualfieldBx.value() == 0:  #0 mT
@@ -876,7 +879,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.arduino_handler.send(self.Bx, self.By, self.Bz,
                                             self.alpha, self.gamma, self.freq, self.psi,
                                             self.gradient_status, self.equal_field_status,
-                                            self.acoustic_frequency)
+                                            self.acoustic_frequency, self.manual_status, self.coil1_manual,
+                                             self.coil2_manual, self.coil3_manual, 
+                                             self.coil4_manual, self.coil5_manual, 
+                                             self.coil6_manual)
             
         
 
@@ -1453,6 +1459,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.manualapplybutton.setText("Stop")
         else:
             self.ui.manualapplybutton.setText("Apply")
+            self.manual_status = False
             self.apply_actions(False)
     
 

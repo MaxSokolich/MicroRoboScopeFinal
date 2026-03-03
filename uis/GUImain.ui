@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1717</width>
-    <height>1026</height>
+    <height>1027</height>
    </rect>
   </property>
   <property name="font">
@@ -1249,7 +1249,7 @@ font-size: 10pt;</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>22</width>
+        <width>18</width>
         <height>0</height>
        </size>
       </property>
@@ -1724,7 +1724,7 @@ color: rgb(0,255,0);</string>
      </property>
      <property name="minimumSize">
       <size>
-       <width>22</width>
+       <width>18</width>
        <height>0</height>
       </size>
      </property>
@@ -2094,7 +2094,7 @@ font-size: 10pt;</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Control">
       <attribute name="title">
@@ -2104,8 +2104,8 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>10</y>
-         <width>271</width>
+         <y>0</y>
+         <width>141</width>
          <height>21</height>
         </rect>
        </property>
@@ -2117,8 +2117,8 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>30</y>
-         <width>81</width>
+         <y>20</y>
+         <width>121</width>
          <height>21</height>
         </rect>
        </property>
@@ -2130,7 +2130,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>60</y>
+         <y>40</y>
          <width>31</width>
          <height>21</height>
         </rect>
@@ -2143,7 +2143,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>90</y>
+         <y>70</y>
          <width>51</width>
          <height>21</height>
         </rect>
@@ -2155,8 +2155,8 @@ font-size: 10pt;</string>
       <widget class="QSpinBox" name="alphaspinBox">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>120</y>
+         <x>110</x>
+         <y>100</y>
          <width>71</width>
          <height>22</height>
         </rect>
@@ -2172,7 +2172,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>120</y>
+         <y>100</y>
          <width>41</width>
          <height>16</height>
         </rect>
@@ -2184,8 +2184,8 @@ font-size: 10pt;</string>
       <widget class="QDoubleSpinBox" name="magneticfrequencyspinBox">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>150</y>
+         <x>110</x>
+         <y>130</y>
          <width>71</width>
          <height>31</height>
         </rect>
@@ -2204,7 +2204,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>140</y>
+         <y>120</y>
          <width>111</width>
          <height>41</height>
         </rect>
@@ -2217,8 +2217,8 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="gammaspinBox">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>90</y>
+         <x>110</x>
+         <y>70</y>
          <width>71</width>
          <height>22</height>
         </rect>
@@ -2233,8 +2233,8 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="psispinBox">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>60</y>
+         <x>110</x>
+         <y>40</y>
          <width>71</width>
          <height>22</height>
         </rect>
@@ -2249,23 +2249,23 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
-         <x>230</x>
+         <x>250</x>
          <y>0</y>
          <width>81</width>
-         <height>21</height>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
         <string>Manual (%)</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="manualfieldBx">
+      <widget class="QSpinBox" name="manualfieldCoil1">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>20</y>
+         <x>280</x>
+         <y>15</y>
          <width>51</width>
-         <height>25</height>
+         <height>22</height>
         </rect>
        </property>
        <property name="minimum">
@@ -2282,22 +2282,22 @@ Frequency (Hz):</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>20</y>
-         <width>21</width>
-         <height>21</height>
+         <y>15</y>
+         <width>51</width>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Bx:</string>
+        <string>Coil1 (+Y):</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="manualfieldBy">
+      <widget class="QSpinBox" name="manualfieldCoil2">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>50</y>
+         <x>280</x>
+         <y>40</y>
          <width>51</width>
-         <height>25</height>
+         <height>22</height>
         </rect>
        </property>
        <property name="minimum">
@@ -2317,22 +2317,22 @@ Frequency (Hz):</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>50</y>
-         <width>21</width>
-         <height>21</height>
+         <y>40</y>
+         <width>51</width>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>By:</string>
+        <string>Coil2 (+X):</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="manualfieldBz">
+      <widget class="QSpinBox" name="manualfieldCoil3">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>80</y>
+         <x>280</x>
+         <y>65</y>
          <width>51</width>
-         <height>25</height>
+         <height>22</height>
         </rect>
        </property>
        <property name="minimum">
@@ -2352,22 +2352,22 @@ Frequency (Hz):</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>80</y>
-         <width>21</width>
-         <height>21</height>
+         <y>65</y>
+         <width>51</width>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Bz:</string>
+        <string>Coil3 (-Y):</string>
        </property>
       </widget>
       <widget class="QPushButton" name="manualapplybutton">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>30</y>
-         <width>51</width>
-         <height>61</height>
+         <x>350</x>
+         <y>20</y>
+         <width>41</width>
+         <height>141</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2408,10 +2408,10 @@ Frequency (Hz):</string>
       <widget class="QPushButton" name="applyacousticbutton">
        <property name="geometry">
         <rect>
-         <x>330</x>
-         <y>130</y>
-         <width>41</width>
-         <height>31</height>
+         <x>210</x>
+         <y>185</y>
+         <width>81</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2452,8 +2452,8 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="acousticfreqlabel">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>120</y>
+         <x>10</x>
+         <y>170</y>
          <width>91</width>
          <height>41</height>
         </rect>
@@ -2469,8 +2469,8 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="acousticfreq_spinBox">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>170</y>
+         <x>110</x>
+         <y>180</y>
          <width>91</width>
          <height>31</height>
         </rect>
@@ -2483,6 +2483,111 @@ Frequency (Hz)</string>
        </property>
        <property name="value">
         <number>1000000</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_16">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>90</y>
+         <width>51</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Coil4 (-X):</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_17">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>115</y>
+         <width>51</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Coil5 (+Z):</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_18">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>140</y>
+         <width>51</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Coil6 (-Z):</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="manualfieldCoil4">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>90</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="manualfieldCoil5">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>115</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="manualfieldCoil6">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>140</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
        </property>
       </widget>
      </widget>

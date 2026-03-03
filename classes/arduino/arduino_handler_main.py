@@ -31,7 +31,8 @@ class ArduinoHandler:
 
 
 
-    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic):
+    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic, 
+             manual_mode, coil1_manual, coil2_manual, coil3_manual, coil4_manual, coil5_manual, coil6_manual):
         """
         Send actuation command packet (binary encoded).
         All arguments should be float or int.
@@ -51,6 +52,14 @@ class ArduinoHandler:
                 idx = self._link.tx_obj(float(gradient), start_pos=idx)
                 idx = self._link.tx_obj(float(equal_field), start_pos=idx)
                 idx = self._link.tx_obj(float(acoustic), start_pos=idx)
+
+                idx = self._link.tx_obj(float(manual_mode), start_pos=idx)
+                idx = self._link.tx_obj(float(coil1_manual), start_pos=idx)
+                idx = self._link.tx_obj(float(coil2_manual), start_pos=idx)
+                idx = self._link.tx_obj(float(coil3_manual), start_pos=idx)
+                idx = self._link.tx_obj(float(coil4_manual), start_pos=idx)
+                idx = self._link.tx_obj(float(coil5_manual), start_pos=idx)
+                idx = self._link.tx_obj(float(coil6_manual), start_pos=idx)
 
                 self._link.send(idx)
               

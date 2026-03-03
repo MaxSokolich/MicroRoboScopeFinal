@@ -1249,7 +1249,7 @@ font-size: 10pt;</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>18</width>
+        <width>22</width>
         <height>0</height>
        </size>
       </property>
@@ -1724,7 +1724,7 @@ color: rgb(0,255,0);</string>
      </property>
      <property name="minimumSize">
       <size>
-       <width>18</width>
+       <width>22</width>
        <height>0</height>
       </size>
      </property>
@@ -2103,7 +2103,7 @@ font-size: 10pt;</string>
       <widget class="QCheckBox" name="gradient_status_checkbox">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>10</x>
          <y>0</y>
          <width>141</width>
          <height>21</height>
@@ -2116,8 +2116,8 @@ font-size: 10pt;</string>
       <widget class="QCheckBox" name="equal_field_checkbox">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>20</y>
+         <x>130</x>
+         <y>0</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -2129,8 +2129,8 @@ font-size: 10pt;</string>
       <widget class="QLabel" name="psilabel">
        <property name="geometry">
         <rect>
-         <x>70</x>
-         <y>40</y>
+         <x>10</x>
+         <y>25</y>
          <width>31</width>
          <height>21</height>
         </rect>
@@ -2142,8 +2142,8 @@ font-size: 10pt;</string>
       <widget class="QLabel" name="gammalabel">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>70</y>
+         <x>10</x>
+         <y>55</y>
          <width>51</width>
          <height>21</height>
         </rect>
@@ -2155,9 +2155,9 @@ font-size: 10pt;</string>
       <widget class="QSpinBox" name="alphaspinBox">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>100</y>
-         <width>71</width>
+         <x>70</x>
+         <y>85</y>
+         <width>51</width>
          <height>22</height>
         </rect>
        </property>
@@ -2171,10 +2171,10 @@ font-size: 10pt;</string>
       <widget class="QLabel" name="manualalphalabel">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>100</y>
+         <x>10</x>
+         <y>85</y>
          <width>41</width>
-         <height>16</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -2184,9 +2184,9 @@ font-size: 10pt;</string>
       <widget class="QDoubleSpinBox" name="magneticfrequencyspinBox">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>130</y>
-         <width>71</width>
+         <x>130</x>
+         <y>120</y>
+         <width>61</width>
          <height>31</height>
         </rect>
        </property>
@@ -2204,7 +2204,7 @@ font-size: 10pt;</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>120</y>
+         <y>115</y>
          <width>111</width>
          <height>41</height>
         </rect>
@@ -2217,9 +2217,9 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="gammaspinBox">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>70</y>
-         <width>71</width>
+         <x>70</x>
+         <y>55</y>
+         <width>51</width>
          <height>22</height>
         </rect>
        </property>
@@ -2233,9 +2233,9 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="psispinBox">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>40</y>
-         <width>71</width>
+         <x>70</x>
+         <y>25</y>
+         <width>51</width>
          <height>22</height>
         </rect>
        </property>
@@ -2249,7 +2249,7 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>290</x>
          <y>0</y>
          <width>81</width>
          <height>16</height>
@@ -2262,7 +2262,7 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldCoil1">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>15</y>
          <width>51</width>
          <height>22</height>
@@ -2281,9 +2281,9 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_7">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>15</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2294,7 +2294,7 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldCoil2">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>40</y>
          <width>51</width>
          <height>22</height>
@@ -2316,9 +2316,9 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_8">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>40</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2329,7 +2329,7 @@ Frequency (Hz):</string>
       <widget class="QSpinBox" name="manualfieldCoil3">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>65</y>
          <width>51</width>
          <height>22</height>
@@ -2351,9 +2351,9 @@ Frequency (Hz):</string>
       <widget class="QLabel" name="label_9">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>65</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2364,10 +2364,10 @@ Frequency (Hz):</string>
       <widget class="QPushButton" name="manualapplybutton">
        <property name="geometry">
         <rect>
-         <x>350</x>
-         <y>20</y>
-         <width>41</width>
-         <height>141</height>
+         <x>280</x>
+         <y>170</y>
+         <width>101</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2408,10 +2408,10 @@ Frequency (Hz):</string>
       <widget class="QPushButton" name="applyacousticbutton">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>185</y>
-         <width>81</width>
-         <height>20</height>
+         <x>200</x>
+         <y>170</y>
+         <width>51</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -2453,7 +2453,7 @@ Frequency (Hz):</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>170</y>
+         <y>160</y>
          <width>91</width>
          <height>41</height>
         </rect>
@@ -2469,8 +2469,8 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="acousticfreq_spinBox">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>180</y>
+         <x>100</x>
+         <y>170</y>
          <width>91</width>
          <height>31</height>
         </rect>
@@ -2488,9 +2488,9 @@ Frequency (Hz)</string>
       <widget class="QLabel" name="label_16">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>90</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2501,9 +2501,9 @@ Frequency (Hz)</string>
       <widget class="QLabel" name="label_17">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>115</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2514,9 +2514,9 @@ Frequency (Hz)</string>
       <widget class="QLabel" name="label_18">
        <property name="geometry">
         <rect>
-         <x>210</x>
+         <x>270</x>
          <y>140</y>
-         <width>51</width>
+         <width>61</width>
          <height>16</height>
         </rect>
        </property>
@@ -2527,7 +2527,7 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="manualfieldCoil4">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>90</y>
          <width>51</width>
          <height>22</height>
@@ -2549,7 +2549,7 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="manualfieldCoil5">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>115</y>
          <width>51</width>
          <height>22</height>
@@ -2571,7 +2571,7 @@ Frequency (Hz)</string>
       <widget class="QSpinBox" name="manualfieldCoil6">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>340</x>
          <y>140</y>
          <width>51</width>
          <height>22</height>
@@ -2588,6 +2588,111 @@ Frequency (Hz)</string>
        </property>
        <property name="displayIntegerBase">
         <number>10</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Bxlabel">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>25</y>
+         <width>31</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Bx:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Bzlabel">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>85</y>
+         <width>31</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Bz:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Bylabel">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>55</y>
+         <width>31</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>By:</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="Bxspinbox">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>25</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="Byspinbox">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>55</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="Bzspinbox">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>85</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>0</number>
        </property>
       </widget>
      </widget>

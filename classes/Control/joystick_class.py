@@ -151,6 +151,7 @@ class Windows_Joystick:
         self.typ = 0
 
 
+
     def deadzone(self, value):
         """
         accepts a value [0,1] and if its less than .2 make it zero otherwise use the value. limits joystick noise
@@ -182,6 +183,7 @@ class Windows_Joystick:
                 if event.axis == 2 or event.axis == 3: #RY
                     rx = self.deadzone(joystick.get_axis(2))
                     ry = -self.deadzone(joystick.get_axis(3))
+        
 
                     
                 
@@ -189,6 +191,7 @@ class Windows_Joystick:
                         self.alpha = 0
                         self.gamma = 0
                         self.freq = 0
+                        
 
                     elif rx == 0 and ry > 0:
                         self.alpha = np.pi/2

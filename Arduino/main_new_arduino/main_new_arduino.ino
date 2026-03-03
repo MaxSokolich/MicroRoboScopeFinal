@@ -39,6 +39,7 @@ float action[17];  // Incoming command array (Bx, By, Bz, alpha, gamma, freq, ps
 
 
 
+float amplitude;
 float Bx;
 float By;
 float Bz;
@@ -50,7 +51,6 @@ float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
 
-float manual_mode;
 float coil1_manual;
 float coil2_manual;
 float coil3_manual;
@@ -535,25 +535,27 @@ void loop()
     // MAP RECEIVED ACTIONS INTO NAMED VARIABLES
     // (These correspond to magnetic field instructions + settings)
     // ================================================================
-    Bx_uniform        = action[0];
-    By_uniform        = action[1];
-    Bz_uniform        = action[2];
-    alpha             = action[3];
-    gamma             = action[4];
-    rolling_frequency = action[5]; 
-    psi               = action[6]; 
-    gradient_status   = action[7];
-    equal_field_status= action[8];
-    acoustic_frequency= action[9];
+    amplitude         = action[0];
+    Bx_uniform        = action[1];
+    By_uniform        = action[2];
+    Bz_uniform        = action[3];
+    alpha             = action[4];
+    gamma             = action[5];
+    rolling_frequency = action[6]; 
+    psi               = action[7]; 
+    gradient_status   = action[8];
+    equal_field_status= action[9];
+    acoustic_frequency= action[10];
 
-    manual_mode       = action[10];
     coil1_manual      = action[11];
     coil2_manual      = action[12];
     coil3_manual      = action[13];
     coil4_manual      = action[14];
     coil5_manual      = action[15];
     coil6_manual      = action[16];
+
     
+
 
     
     // ================================================================
@@ -590,15 +592,15 @@ void loop()
     // Using the 7/1/25 derivation
     // ================================================================
     if (omega == 0){
-        Bx_roll = 0;
-        By_roll = 0;
-        Bz_roll = 0;
-    }
+         Bx_roll = 0;
+         By_roll = 0;
+         Bz_roll = 0;
+     }
     else {
         // Base rotating field components
-        Bx_roll = -(cos(alpha)*cos(gamma)*cos(omega*t)) + ( sin(alpha)*sin(omega*t) );
-        By_roll = -(sin(alpha)*cos(gamma)*cos(omega*t)) - ( cos(alpha)*sin(omega*t) );
-        Bz_roll =    sin(gamma)*cos(omega*t);
+        Bx_roll = amplitude * (-(cos(alpha)*cos(gamma)*cos(omega*t)) + ( sin(alpha)*sin(omega*t) ));
+        By_roll = amplitude * (-(sin(alpha)*cos(gamma)*cos(omega*t)) - ( cos(alpha)*sin(omega*t) ));
+        Bz_roll = amplitude * (   sin(gamma)*cos(omega*t));
 
         // ============================================================
         // Perpendicular component (if ψ != 90°)
@@ -673,20 +675,27 @@ void loop()
     }
 
 
-    // ================================================================
-    // GRADIENT MODE
-    // If gradient_status != 0 → use 2-coil differential mode
-    // Uniform mode uses opposing pairs in Helmholtz configuration
-    // ================================================================
-    if (manual_mode != 0 ){
-      set1(coil1_manual);
-      set2(coil2_manual);
-      set3(coil3_manual);
-      set4(coil4_manual);
-      set5(coil5_manual);
-      set6(coil6_manual);
-    }
+    // check for manual field apply
+
+    if (coil1_manual != 0 || coil2_manual != 0 || coil3_manual != 0 || 
+        coil4_manual != 0 || coil5_manual != 0 || coil6_manual != 0) {
+              // Executes if ANY coil variable is non-zero
+              set1(coil1_manual);
+              set2(coil2_manual);
+              set3(coil3_manual);
+              set4(coil4_manual);
+              set5(coil5_manual);
+              set6(coil6_manual);
+          //Serial.print("output manual single"); 
+        }
     else{
+
+                      // ================================================================
+                // GRADIENT MODE
+                // If gradient_status != 0 → use 2-coil differential mode
+                // Uniform mode uses opposing pairs in Helmholtz configuration
+                // ================================================================
+
                 if (gradient_status != 0){
                     
                     // ---------------- Y GRADIENT ----------------
@@ -739,6 +748,7 @@ void loop()
                     set4(-Bx_final);
                     set5(Bz_final);
                     set6(-Bz_final);
+                  
                 }
 
     }

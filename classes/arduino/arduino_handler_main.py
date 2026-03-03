@@ -31,8 +31,8 @@ class ArduinoHandler:
 
 
 
-    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic, 
-             manual_mode, coil1_manual, coil2_manual, coil3_manual, coil4_manual, coil5_manual, coil6_manual):
+    def send(self, amplitude, Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic, 
+             coil1_manual, coil2_manual, coil3_manual, coil4_manual, coil5_manual, coil6_manual):
         """
         Send actuation command packet (binary encoded).
         All arguments should be float or int.
@@ -42,6 +42,7 @@ class ArduinoHandler:
           
             try:
                 idx = 0
+                idx = self._link.tx_obj(float(amplitude), start_pos=idx)
                 idx = self._link.tx_obj(float(Bx), start_pos=idx)
                 idx = self._link.tx_obj(float(By), start_pos=idx)
                 idx = self._link.tx_obj(float(Bz), start_pos=idx)
@@ -53,13 +54,15 @@ class ArduinoHandler:
                 idx = self._link.tx_obj(float(equal_field), start_pos=idx)
                 idx = self._link.tx_obj(float(acoustic), start_pos=idx)
 
-                idx = self._link.tx_obj(float(manual_mode), start_pos=idx)
+
                 idx = self._link.tx_obj(float(coil1_manual), start_pos=idx)
                 idx = self._link.tx_obj(float(coil2_manual), start_pos=idx)
                 idx = self._link.tx_obj(float(coil3_manual), start_pos=idx)
                 idx = self._link.tx_obj(float(coil4_manual), start_pos=idx)
                 idx = self._link.tx_obj(float(coil5_manual), start_pos=idx)
                 idx = self._link.tx_obj(float(coil6_manual), start_pos=idx)
+
+               
 
                 self._link.send(idx)
               
@@ -108,19 +111,19 @@ class ArduinoHandler:
 if __name__ == "__main__":
     def printer(msg):
         print(msg)
-    arduino = ArduinoHandler(port="COM5", printer=printer)
+    arduino = ArduinoHandler(port="COM4", printer=printer)
     time.sleep(2)
     print("open arduino srial monitor so you can see data being received")
 
 
     #arduino.send(B, B, B, B, B, B, B, B, B, B)
-    arduino.send(1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    arduino.send(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
    
     time.sleep(2)
-    arduino.send(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    currents = arduino.receive()
-    if currents:
-        print("Currents received:", currents)
+    arduino.send(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    #currents = arduino.receive()
+    #if currents:
+    #    print("Currents received:", currents)
     print("Zero command sent")
     arduino.close()
  

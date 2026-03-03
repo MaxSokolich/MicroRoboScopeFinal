@@ -16,7 +16,7 @@ SerialTransfer myTransfer;  // Object for sending/receiving binary packets
 //  STORAGE FOR INCOMING PYTHON COMMANDS (10 floats total)
 //  Python sends these at ~20–30 Hz using PySerialTransfer.
 // ================================================================
-float action[10];  // Incoming command array (Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoustic)
+float action[17];  // Incoming command array (Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoustic)
 
 
 // Define PI manually (more precision than built-in)
@@ -33,7 +33,9 @@ float action[10];  // Incoming command array (Bx, By, Bz, alpha, gamma, freq, ps
 //   - gradient mode flag
 //   - equal-field mode flag
 //   - acoustic frequency for AD9850 module
+//   - manual set actions
 // ================================================================
+float amplitude;
 float Bx;
 float By;
 float Bz;
@@ -44,6 +46,13 @@ float psi;
 float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
+
+float coil1_manual;
+float coil2_manual;
+float coil3_manual;
+float coil4_manual;
+float coil5_manual;
+float coil6_manual;
 
 int phase = 0;   // Phase accumulator for the AD9850 (unused but required by DDS library)
 static uint32_t lastSend = 0;  // initilize lastsend variable for throttling send rate back to python
@@ -539,16 +548,24 @@ void loop()
     // MAP RECEIVED ACTIONS INTO NAMED VARIABLES
     // (These correspond to magnetic field instructions + settings)
     // ================================================================
-    Bx_uniform        = action[0];
-    By_uniform        = action[1];
-    Bz_uniform        = action[2];
-    alpha             = action[3];
-    gamma             = action[4];
-    rolling_frequency = action[5]; 
-    psi               = action[6]; 
-    gradient_status   = action[7];
-    equal_field_status= action[8];
-    acoustic_frequency= action[9];
+    amplitude         = action[0];
+    Bx_uniform        = action[1];
+    By_uniform        = action[2];
+    Bz_uniform        = action[3];
+    alpha             = action[4];
+    gamma             = action[5];
+    rolling_frequency = action[6]; 
+    psi               = action[7]; 
+    gradient_status   = action[8];
+    equal_field_status= action[9];
+    acoustic_frequency= action[10];
+
+    coil1_manual      = action[11];
+    coil2_manual      = action[12];
+    coil3_manual      = action[13];
+    coil4_manual      = action[14];
+    coil5_manual      = action[15];
+    coil6_manual      = action[16];
 
     
     // ================================================================
@@ -584,16 +601,16 @@ void loop()
     // Otherwise compute theoretical rotating field vector
     // Using your 7/1/25 derivation
     // ================================================================
-    if (omega == 0){
-        Bx_roll = 0;
-        By_roll = 0;
-        Bz_roll = 0;
-    }
-    else {
+    // if (omega == 0){
+    //     Bx_roll = 0;
+    //     By_roll = 0;
+    //     Bz_roll = 0;
+    // }
+    //else {
         // Base rotating field components
-        Bx_roll = -(cos(alpha)*cos(gamma)*cos(omega*t)) + ( sin(alpha)*sin(omega*t) );
-        By_roll = -(sin(alpha)*cos(gamma)*cos(omega*t)) - ( cos(alpha)*sin(omega*t) );
-        Bz_roll =    sin(gamma)*cos(omega*t);
+        Bx_roll = amplitude * (-(cos(alpha)*cos(gamma)*cos(omega*t)) + ( sin(alpha)*sin(omega*t) ));
+        By_roll = amplitude * (-(sin(alpha)*cos(gamma)*cos(omega*t)) - ( cos(alpha)*sin(omega*t) ));
+        Bz_roll = amplitude * (   sin(gamma)*cos(omega*t));
 
         // ============================================================
         // Perpendicular component (if ψ != 90°)
@@ -620,7 +637,7 @@ void loop()
         Bx_roll = (Bx_roll + BxPer) / (1 + c);
         By_roll = (By_roll + ByPer) / (1 + c);
         Bz_roll = (Bz_roll + BzPer) / (1 + c);
-    }
+    //}
 
 
     // ================================================================
@@ -685,149 +702,164 @@ C4 = 0;
 C5 = 0;
 C6 = 0;
 
-// if gradient status = 1: output the the corresponding gradient field
-  if (gradient_status != 0){
+if (coil1_manual != 0 || coil2_manual != 0 || coil3_manual != 0 || 
+    coil4_manual != 0 || coil5_manual != 0 || coil6_manual != 0) {
+          // Executes if ANY coil variable is non-zero
+          set1(coil1_manual);
+          set2(coil2_manual);
+          set3(coil3_manual);
+          set4(coil4_manual);
+          set5(coil5_manual);
+          set6(coil6_manual);
+      //Serial.print("output manual single"); 
+    }
 
-    if (By_final < 0){//hack change of all signs and <
-        C3 = C3 + By_final;
-        C2 = C2 - By_final;
-        C6 = C6 + By_final;
-        C5 = C5 - By_final;
-      }
 
-    if (By_final > 0){//hack change of all signs and >
-        C1 = C1 - By_final;
-        C4 = C4 - By_final;
-      }
+else
+{
+        // if gradient status = 1: output the the corresponding gradient field
+          if (gradient_status != 0){
 
-    if (Bx_final > 0){
-        C2 = C2 + Bx_final;
-        C1 = C1 - 0.5*Bx_final;//hack change of sign
-        C5 = C5 + Bx_final;
-        C4 = C4 - 0.5*Bx_final;//hack change of sign
-      }
+            if (By_final < 0){//hack change of all signs and <
+                C3 = C3 + By_final;
+                C2 = C2 - By_final;
+                C6 = C6 + By_final;
+                C5 = C5 - By_final;
+              }
 
-    if (Bx_final < 0){
-        C3 = C3 - Bx_final;
-        C1 = C1 + 0.5*Bx_final;//hack change of all signs
-        C6 = C6 - Bx_final;
-        C4 = C4 + 0.5*Bx_final;
-      }
+            if (By_final > 0){//hack change of all signs and >
+                C1 = C1 - By_final;
+                C4 = C4 - By_final;
+              }
 
-    if (Bz_final > 0){
-        C1 = C1 + Bz_final;
-        C2 = C2 + Bz_final;
-        C3 = C3 + Bz_final;
-      }
+            if (Bx_final > 0){
+                C2 = C2 + Bx_final;
+                C1 = C1 - 0.5*Bx_final;//hack change of sign
+                C5 = C5 + Bx_final;
+                C4 = C4 - 0.5*Bx_final;//hack change of sign
+              }
 
-    if (Bz_final < 0){
-        C4 = C4 + Bz_final;
-        C5 = C5 + Bz_final;
-        C6 = C6 + Bz_final;
-      }
+            if (Bx_final < 0){
+                C3 = C3 - Bx_final;
+                C1 = C1 + 0.5*Bx_final;//hack change of all signs
+                C6 = C6 - Bx_final;
+                C4 = C4 + 0.5*Bx_final;
+              }
 
-      //now we need to make sure that if any are greater than 1 we normalize:
-      float vals[6] = { C1, C2, C3, C4, C5, C6 };
-      MaxVal = findMax(vals, 6);
+            if (Bz_final > 0){
+                C1 = C1 + Bz_final;
+                C2 = C2 + Bz_final;
+                C3 = C3 + Bz_final;
+              }
 
-      if (MaxVal>1){
-        C1 = C1/MaxVal;
-        C2 = C2/MaxVal;
-        C3 = C3/MaxVal;
-        C4 = C4/MaxVal;
-        C5 = C5/MaxVal;
-        C6 = C6/MaxVal;
-      }
+            if (Bz_final < 0){
+                C4 = C4 + Bz_final;
+                C5 = C5 + Bz_final;
+                C6 = C6 + Bz_final;
+              }
 
-    set1(C1);
-    set2(C2);
-    set3(C3);
-    set4(C4);
-    set5(C5);
-    set6(C6);
- 
-   }
+              //now we need to make sure that if any are greater than 1 we normalize:
+              float vals[6] = { C1, C2, C3, C4, C5, C6 };
+              MaxVal = findMax(vals, 6);
 
-   // if gradient status = 0: output the correspending uniform field
-   else {
-    if (By_final > 0){
-        C3 = C3 - By_final;
-        C2 = C2 - By_final;
-        C6 = C6 - By_final;
-        C5 = C5 - By_final;
-        C1 = C1 + By_final;
-        C4 = C4 + By_final;
-      }
+              if (MaxVal>1){
+                C1 = C1/MaxVal;
+                C2 = C2/MaxVal;
+                C3 = C3/MaxVal;
+                C4 = C4/MaxVal;
+                C5 = C5/MaxVal;
+                C6 = C6/MaxVal;
+              }
 
-    if (By_final < 0){
-        C3 = C3 + By_final;
-        C2 = C2 + By_final;
-        C6 = C6 + By_final;
-        C5 = C5 + By_final;
-        C1 = C1 - By_final;
-        C4 = C4 - By_final;
-      }
+            set1(C1);
+            set2(C2);
+            set3(C3);
+            set4(C4);
+            set5(C5);
+            set6(C6);
+        
+          }
 
-    if (Bx_final > 0){
-        C2 = C2 - Bx_final;
-        C3 = C3 - Bx_final;
-        C1 = C1 + Bx_final;
-        C5 = C5 - Bx_final;
-        C6 = C6 - Bx_final;
-        C4 = C4 + Bx_final;
-      }
+          // if gradient status = 0: output the correspending uniform field
+          else {
+            if (By_final > 0){
+                C3 = C3 - By_final;
+                C2 = C2 - By_final;
+                C6 = C6 - By_final;
+                C5 = C5 - By_final;
+                C1 = C1 + By_final;
+                C4 = C4 + By_final;
+              }
 
-    if (Bx_final < 0){
-        C2 = C2 + Bx_final;
-        C3 = C3 + Bx_final;
-        C1 = C1 - Bx_final;
-        C5 = C5 + Bx_final;
-        C6 = C6 + Bx_final;
-        C4 = C4 - Bx_final;
-      }
+            if (By_final < 0){
+                C3 = C3 + By_final;
+                C2 = C2 + By_final;
+                C6 = C6 + By_final;
+                C5 = C5 + By_final;
+                C1 = C1 - By_final;
+                C4 = C4 - By_final;
+              }
 
-    if (Bz_final > 0){
-        C1 = C1 - Bz_final;
-        C2 = C2 - Bz_final;
-        C3 = C3 - Bz_final;
-        C4 = C4 + Bz_final;
-        C5 = C5 + Bz_final;
-        C6 = C6 + Bz_final;
-      }
+            if (Bx_final > 0){
+                C2 = C2 - Bx_final;
+                C3 = C3 - Bx_final;
+                C1 = C1 + Bx_final;
+                C5 = C5 - Bx_final;
+                C6 = C6 - Bx_final;
+                C4 = C4 + Bx_final;
+              }
 
-    if (Bz_final < 0){
-        C1 = C1 + Bz_final;
-        C2 = C2 + Bz_final;
-        C3 = C3 + Bz_final;
-        C4 = C4 - Bz_final;
-        C5 = C5 - Bz_final;
-        C6 = C6 - Bz_final;
-      }
+            if (Bx_final < 0){
+                C2 = C2 + Bx_final;
+                C3 = C3 + Bx_final;
+                C1 = C1 - Bx_final;
+                C5 = C5 + Bx_final;
+                C6 = C6 + Bx_final;
+                C4 = C4 - Bx_final;
+              }
 
-    float absVals[6] = { fabsf(C1), fabsf(C2), fabsf(C3), fabsf(C4), fabsf(C5), fabsf(C6) };
-    MaxVal = findMax(absVals, 6);
+            if (Bz_final > 0){
+                C1 = C1 - Bz_final;
+                C2 = C2 - Bz_final;
+                C3 = C3 - Bz_final;
+                C4 = C4 + Bz_final;
+                C5 = C5 + Bz_final;
+                C6 = C6 + Bz_final;
+              }
 
-    if (MaxVal>1){
-        C1 = C1/MaxVal;
-        C2 = C2/MaxVal;
-        C3 = C3/MaxVal;
-        C4 = C4/MaxVal;
-        C5 = C5/MaxVal;
-        C6 = C6/MaxVal;
-      }
+            if (Bz_final < 0){
+                C1 = C1 + Bz_final;
+                C2 = C2 + Bz_final;
+                C3 = C3 + Bz_final;
+                C4 = C4 - Bz_final;
+                C5 = C5 - Bz_final;
+                C6 = C6 - Bz_final;
+              }
 
-    // ================================================================
-    // UNIFORM MODE (standard Helmholtz coil driving)
-    // Opposing pairs get equal & opposite duty signs
-    // ================================================================
-       set1(C1);
-    set2(C2);
-    set3(C3);
-    set4(C4);
-    set5(C5);
-    set6(C6);
-   }
+            float absVals[6] = { fabsf(C1), fabsf(C2), fabsf(C3), fabsf(C4), fabsf(C5), fabsf(C6) };
+            MaxVal = findMax(absVals, 6);
 
+            if (MaxVal>1){
+                C1 = C1/MaxVal;
+                C2 = C2/MaxVal;
+                C3 = C3/MaxVal;
+                C4 = C4/MaxVal;
+                C5 = C5/MaxVal;
+                C6 = C6/MaxVal;
+              }
+
+            // ================================================================
+            // UNIFORM MODE (standard Helmholtz coil driving)
+            // Opposing pairs get equal & opposite duty signs
+            // ================================================================
+            set1(C1);
+            set2(C2);
+            set3(C3);
+            set4(C4);
+            set5(C5);
+            set6(C6);
+          }
+    }
 
     // set1(0); //west
     // set2(0); //east

@@ -170,10 +170,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.magnetic_field_list = []
         
         self.actions = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+        self.amplitude = 1
         self.Bx, self.By, self.Bz = 0,0,0
-        self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.psi, self.freq = 0,0,0,0
-        self.field_magnitude = 100
+        self.coil1_manual = 0
+        self.coil2_manual = 0
+        self.coil3_manual = 0
+        self.coil4_manual = 0
+        self.coil5_manual = 0
+        self.coil6_manual = 0
         
 
       
@@ -283,9 +288,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.joystickbutton.clicked.connect(self.toggle_joystick_status)
         self.ui.autoacousticbutton.clicked.connect(self.toggle_autoacoustic)
         self.ui.manualapplybutton.clicked.connect(self.get_manual_bfieldbuttons)
-        self.ui.manualfieldBx.valueChanged.connect(self.get_widget_vals)
-        self.ui.manualfieldBy.valueChanged.connect(self.get_widget_vals)
-        self.ui.manualfieldBz.valueChanged.connect(self.get_widget_vals)
+
         self.ui.croppedmasktoggle.clicked.connect(self.showcroppedoriginal)
         self.ui.croppedrecordbutton.clicked.connect(self.croppedrecordfunction)
         self.ui.import_excel_actions.clicked.connect(self.read_excel_actions)
@@ -415,7 +418,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if len(self.tracker.robot_list)>0:
              
 
-                a = 700 # controls the 
+                a = 700 # controls the size
                 waypoints = self.ui.infinity_size.value()  # number of waypoints
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
@@ -560,12 +563,20 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         elif self.manual_status == True:
+            self.Bx = self.ui.Bxspinbox.value()/100
+            self.By = self.ui.Byspinbox.value()/100
+            self.Bz = self.ui.Bzspinbox.value()/100
+
+            
+
+
             self.coil1_manual = self.ui.manualfieldCoil1.value()/100
             self.coil2_manual = self.ui.manualfieldCoil2.value()/100
             self.coil3_manual = self.ui.manualfieldCoil3.value()/100
             self.coil4_manual = self.ui.manualfieldCoil4.value()/100
             self.coil5_manual = self.ui.manualfieldCoil5.value()/100
             self.coil6_manual = self.ui.manualfieldCoil6.value()/100
+
             
             """# X coil calibration
             if self.ui.manualfieldBx.value() == 0:  #0 mT
@@ -854,7 +865,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #zero output
         if status == False:
             self.manual_status = False
-            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
+            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency, self.coil1_manual, self.coil2_manual, self.coil3_manual, self.coil4_manual, self.coil5_manual, self.coil6_manual,  = 0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
         #output current actions to simulator
 
@@ -876,13 +887,15 @@ class MainWindow(QtWidgets.QMainWindow):
                     f"{self.freq:.2f},{self.psi:.2f},{self.gradient_status:.2f},{self.equal_field_status:.2f},"
                     f"{self.acoustic_frequency:.2f}")"""
             
-            self.arduino_handler.send(self.Bx, self.By, self.Bz,
+            self.arduino_handler.send(self.amplitude, self.Bx, self.By, self.Bz,
                                             self.alpha, self.gamma, self.freq, self.psi,
                                             self.gradient_status, self.equal_field_status,
-                                            self.acoustic_frequency, self.manual_status, self.coil1_manual,
+                                            self.acoustic_frequency, self.coil1_manual,
                                              self.coil2_manual, self.coil3_manual, 
                                              self.coil4_manual, self.coil5_manual, 
                                              self.coil6_manual)
+            
+          
             
         
 

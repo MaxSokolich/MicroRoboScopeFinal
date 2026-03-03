@@ -688,29 +688,29 @@ C6 = 0;
 // if gradient status = 1: output the the corresponding gradient field
   if (gradient_status != 0){
 
-    if (By_final > 0){
+    if (By_final < 0){//hack change of all signs and <
         C3 = C3 + By_final;
-        C2 = C2 + By_final;
+        C2 = C2 - By_final;
         C6 = C6 + By_final;
-        C5 = C5 + By_final;
+        C5 = C5 - By_final;
       }
 
-    if (By_final < 0){
-        C1 = C1 + By_final;
-        C4 = C4 + By_final;
+    if (By_final > 0){//hack change of all signs and >
+        C1 = C1 - By_final;
+        C4 = C4 - By_final;
       }
 
     if (Bx_final > 0){
         C2 = C2 + Bx_final;
-        C1 = C1 + 0.5*Bx_final;
+        C1 = C1 - 0.5*Bx_final;//hack change of sign
         C5 = C5 + Bx_final;
-        C4 = C4 + 0.5*Bx_final;
+        C4 = C4 - 0.5*Bx_final;//hack change of sign
       }
 
     if (Bx_final < 0){
-        C3 = C3 + Bx_final;
-        C1 = C1 + 0.5*Bx_final;
-        C6 = C6 + Bx_final;
+        C3 = C3 - Bx_final;
+        C1 = C1 + 0.5*Bx_final;//hack change of all signs
+        C6 = C6 - Bx_final;
         C4 = C4 + 0.5*Bx_final;
       }
 
@@ -828,6 +828,13 @@ C6 = 0;
     set6(C6);
    }
 
+
+    // set1(0); //west
+    // set2(0); //east
+    // set3(0); //4
+    // set4(0); //south
+    // set5(0); //5
+    // set6(0); //north
   
     // ================================================================
     // READ AND SEND CURRENT DATA BACK TO PYTHON (ACS712 5A sensors)

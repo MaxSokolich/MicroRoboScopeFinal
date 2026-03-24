@@ -13,9 +13,6 @@ class Path_Planner:
 
 
     def run(self, robot_list, mask, stepsize):
-        
-
-            
               
         #define start end
         startpos = robot_list[-1].position_list[-1] #the most recent position at the time of clicking run algo

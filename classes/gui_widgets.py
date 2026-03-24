@@ -909,12 +909,12 @@ class Ui_MainWindow(object):
         self.arduino_portbox.setGeometry(QtCore.QRect(120, 10, 271, 21))
         self.arduino_portbox.setObjectName("arduino_portbox")
         self.magneticfieldsimlabel = QtWidgets.QLabel(self.dockWidgetContents_4)
-        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(50, 630, 310, 310))
+        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(50, 640, 310, 310))
         self.magneticfieldsimlabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
         self.magneticfieldsimlabel.setText("")
         self.magneticfieldsimlabel.setObjectName("magneticfieldsimlabel")
         self.simulationbutton = QtWidgets.QPushButton(self.dockWidgetContents_4)
-        self.simulationbutton.setGeometry(QtCore.QRect(110, 950, 171, 25))
+        self.simulationbutton.setGeometry(QtCore.QRect(110, 955, 171, 20))
         self.simulationbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 255, 0);\n"
@@ -1361,11 +1361,45 @@ class Ui_MainWindow(object):
         self.with_6.setObjectName("with_6")
         self.tabWidget.addTab(self.Planning, "")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.dockWidgetContents_4)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 370, 371, 251))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 360, 371, 251))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.sensorbutton = QtWidgets.QPushButton(self.dockWidgetContents_4)
+        self.sensorbutton.setGeometry(QtCore.QRect(110, 615, 171, 20))
+        self.sensorbutton.setStyleSheet("QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(0, 255, 0);\n"
+"                border-style: outset;\n"
+"                border-width: 2px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(0, 100, 0);\n"
+"                min-width: 1em;\n"
+"                padding: 2px;\n"
+"            }\n"
+"      \n"
+"            QPushButton:checked {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(255, 100, 0);\n"
+"                border-style: inset;\n"
+"                border-width: 2px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(255, 0, 0);\n"
+"                font: bold 16px;\n"
+"                min-width: 1em;\n"
+"\n"
+"               \n"
+"            }\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-color: rgb(100, 100, 100);\n"
+"                padding-left: 5px;\n"
+"                padding-top: 5px;\n"
+"            }")
+        self.sensorbutton.setCheckable(True)
+        self.sensorbutton.setObjectName("sensorbutton")
         self.dockWidget_2.setWidget(self.dockWidgetContents_4)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget_2)
         self.actiondock = QtWidgets.QAction(MainWindow)
@@ -1506,4 +1540,5 @@ class Ui_MainWindow(object):
 " frame as long as the right mouse button is pressed"))
         self.with_6.setText(_translate("MainWindow", "with"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Planning), _translate("MainWindow", "Path Planning"))
+        self.sensorbutton.setText(_translate("MainWindow", "Sensors On"))
         self.actiondock.setText(_translate("MainWindow", "dock"))

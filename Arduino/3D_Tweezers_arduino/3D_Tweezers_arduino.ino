@@ -601,12 +601,12 @@ void loop()
     // Otherwise compute theoretical rotating field vector
     // Using your 7/1/25 derivation
     // ================================================================
-    // if (omega == 0){
-    //     Bx_roll = 0;
-    //     By_roll = 0;
-    //     Bz_roll = 0;
-    // }
-    //else {
+     if (omega == 0){
+         Bx_roll = 0;
+         By_roll = 0;
+         Bz_roll = 0;
+     }
+    else {
         // Base rotating field components
         Bx_roll = amplitude * (-(cos(alpha)*cos(gamma)*cos(omega*t)) + ( sin(alpha)*sin(omega*t) ));
         By_roll = amplitude * (-(sin(alpha)*cos(gamma)*cos(omega*t)) - ( cos(alpha)*sin(omega*t) ));
@@ -637,7 +637,7 @@ void loop()
         Bx_roll = (Bx_roll + BxPer) / (1 + c);
         By_roll = (By_roll + ByPer) / (1 + c);
         Bz_roll = (Bz_roll + BzPer) / (1 + c);
-    //}
+    }
 
 
     // ================================================================
@@ -717,59 +717,53 @@ if (coil1_manual != 0 || coil2_manual != 0 || coil3_manual != 0 ||
 
 else
 {
-        // if gradient status = 1: output the the corresponding gradient field
-          if (gradient_status != 0){
+        // if gradient status = 0: output uniform field
+          if (gradient_status == 0){
 
-            if (By_final < 0){//hack change of all signs and <
-                C3 = C3 + By_final;
-                C2 = C2 - By_final;
-                C6 = C6 + By_final;
-                C5 = C5 - By_final;
+            const float k = 1.0;
+
+            const float Mcam[6][3] = {
+              {0.0,            sqrt(2.0)/3.0,  sqrt(2.0)/6.0},
+              {sqrt(6.0)/6.0, -sqrt(2.0)/6.0,  sqrt(2.0)/6.0},
+              {-sqrt(6.0)/6.0,-sqrt(2.0)/6.0,  sqrt(2.0)/6.0},
+              {0.0,            sqrt(2.0)/3.0,   -sqrt(2.0)/6.0},
+              {sqrt(6.0)/6.0, -sqrt(2.0)/6.0,   -sqrt(2.0)/6.0},
+              {-sqrt(6.0)/6.0,-sqrt(2.0)/6.0,   -sqrt(2.0)/6.0}
+            };
+
+            float B[3] = {Bx, By, Bz};
+            float I[6];
+
+            for (int i = 0; i < 6; i++)
+            {
+              I[i] = 0;
+
+              for (int j = 0; j < 3; j++)
+              {
+                I[i] += Mcam[i][j] * B[j];
               }
 
-            if (By_final > 0){//hack change of all signs and >
-                C1 = C1 - By_final;
-                C4 = C4 - By_final;
-              }
+              I[i] /= k;
+            }
 
-            if (Bx_final > 0){
-                C2 = C2 + Bx_final;
-                C1 = C1 - 0.5*Bx_final;//hack change of sign
-                C5 = C5 + Bx_final;
-                C4 = C4 - 0.5*Bx_final;//hack change of sign
-              }
+            C1 = I[0];
+            C2 = I[1];
+            C3 = I[2];
+            C4 = I[3];
+            C5 = I[4];
+            C6 = I[5];
 
-            if (Bx_final < 0){
-                C3 = C3 - Bx_final;
-                C1 = C1 + 0.5*Bx_final;//hack change of all signs
-                C6 = C6 - Bx_final;
-                C4 = C4 + 0.5*Bx_final;
-              }
+            float vals[6] = { abs(C1), abs(C2), abs(C3), abs(C4), abs(C5), abs(C6) };            
+            MaxVal = findMax(vals, 6);
 
-            if (Bz_final > 0){
-                C1 = C1 + Bz_final;
-                C2 = C2 + Bz_final;
-                C3 = C3 + Bz_final;
-              }
-
-            if (Bz_final < 0){
-                C4 = C4 + Bz_final;
-                C5 = C5 + Bz_final;
-                C6 = C6 + Bz_final;
-              }
-
-              //now we need to make sure that if any are greater than 1 we normalize:
-              float vals[6] = { C1, C2, C3, C4, C5, C6 };
-              MaxVal = findMax(vals, 6);
-
-              if (MaxVal>1){
-                C1 = C1/MaxVal;
-                C2 = C2/MaxVal;
-                C3 = C3/MaxVal;
-                C4 = C4/MaxVal;
-                C5 = C5/MaxVal;
-                C6 = C6/MaxVal;
-              }
+            if (MaxVal>1){
+              C1 = C1/MaxVal;
+              C2 = C2/MaxVal;
+              C3 = C3/MaxVal;
+              C4 = C4/MaxVal;
+              C5 = C5/MaxVal;
+              C6 = C6/MaxVal;
+            }
 
             set1(C1);
             set2(C2);
@@ -777,96 +771,166 @@ else
             set4(C4);
             set5(C5);
             set6(C6);
+
+            // set1(C[0]);
+            // set2(C[1]);
+            // set3(C[2]);
+            // set4(C[3]);
+            // set5(C[4]);
+            // set6(C[5]);
         
           }
 
-          // if gradient status = 0: output the correspending uniform field
+          // if gradient status = 1 output gradient field
           else {
-            if (By_final > 0){
-                C3 = C3 - By_final;
+
+              if (By_final <= 0 && Bx_final > 0){//hack change of all signs and <
+                C3 = C3 + By_final;
                 C2 = C2 - By_final;
-                C6 = C6 - By_final;
+                C6 = C6 + By_final;
                 C5 = C5 - By_final;
-                C1 = C1 + By_final;
-                C4 = C4 + By_final;
+
+                C2 = C2 + Bx_final;
+                C1 = C1 - 0.5*Bx_final;
+                C5 = C5 + Bx_final;
+                C4 = C4 - 0.5*Bx_final;
               }
 
-            if (By_final < 0){
-                C3 = C3 + By_final;
-                C2 = C2 + By_final;
-                C6 = C6 + By_final;
-                C5 = C5 + By_final;
+            if (By_final > 0 && Bx_final >= 0){//y>0 x>0
                 C1 = C1 - By_final;
                 C4 = C4 - By_final;
-              }
 
-            if (Bx_final > 0){
-                C2 = C2 - Bx_final;
-                C3 = C3 - Bx_final;
-                C1 = C1 + Bx_final;
-                C5 = C5 - Bx_final;
-                C6 = C6 - Bx_final;
-                C4 = C4 + Bx_final;
-              }
-
-            if (Bx_final < 0){
                 C2 = C2 + Bx_final;
-                C3 = C3 + Bx_final;
-                C1 = C1 - Bx_final;
+                C1 = C1 - 0.5*Bx_final;
                 C5 = C5 + Bx_final;
-                C6 = C6 + Bx_final;
-                C4 = C4 - Bx_final;
+                C4 = C4 - 0.5*Bx_final;
               }
+
+            if (By_final <= 0 && Bx_final < 0){
+                C3 = C3 - By_final;
+                C2 = C2 + By_final;
+                C6 = C6 - By_final;
+                C5 = C5 + By_final;
+
+                C3 = C3 - Bx_final;
+                C1 = C1 + 0.5*Bx_final;
+                C6 = C6 - Bx_final;
+                C4 = C4 + 0.5*Bx_final;
+              }
+
+
+            if (By_final > 0 && Bx_final <= 0){
+                C1 = C1 - By_final;
+                C4 = C4 - By_final;
+
+                C3 = C3 - Bx_final;
+                C1 = C1 + 0.5*Bx_final;
+                C6 = C6 - Bx_final;
+                C4 = C4 + 0.5*Bx_final;
+              }
+
 
             if (Bz_final > 0){
-                C1 = C1 - Bz_final;
-                C2 = C2 - Bz_final;
-                C3 = C3 - Bz_final;
-                C4 = C4 + Bz_final;
-                C5 = C5 + Bz_final;
-                C6 = C6 + Bz_final;
-              }
-
-            if (Bz_final < 0){
                 C1 = C1 + Bz_final;
                 C2 = C2 + Bz_final;
                 C3 = C3 + Bz_final;
+              }
+
+            if (Bz_final < 0){
                 C4 = C4 - Bz_final;
                 C5 = C5 - Bz_final;
                 C6 = C6 - Bz_final;
               }
 
-            float absVals[6] = { fabsf(C1), fabsf(C2), fabsf(C3), fabsf(C4), fabsf(C5), fabsf(C6) };
-            MaxVal = findMax(absVals, 6);
-
-            if (MaxVal>1){
-                C1 = C1/MaxVal;
-                C2 = C2/MaxVal;
-                C3 = C3/MaxVal;
-                C4 = C4/MaxVal;
-                C5 = C5/MaxVal;
-                C6 = C6/MaxVal;
-              }
-
-            // ================================================================
-            // UNIFORM MODE (standard Helmholtz coil driving)
-            // Opposing pairs get equal & opposite duty signs
-            // ================================================================
             set1(C1);
             set2(C2);
             set3(C3);
             set4(C4);
-            set5(C5);
+            set5(C5); 
             set6(C6);
+// Tried using matrix code but it's not workig for some reason:
+//             const float k = 1.0;
+
+//             const float Mcam[6][3] = {
+//               {0.0,            sqrt(2.0)/3.0,  sqrt(2.0)/6.0},
+//               {sqrt(6.0)/6.0, -sqrt(2.0)/6.0,  sqrt(2.0)/6.0},
+//               {-sqrt(6.0)/6.0,-sqrt(2.0)/6.0,  sqrt(2.0)/6.0},
+//               {0.0,            sqrt(2.0)/3.0,   -sqrt(2.0)/6.0},
+//               {sqrt(6.0)/6.0, -sqrt(2.0)/6.0,   -sqrt(2.0)/6.0},
+//               {-sqrt(6.0)/6.0,-sqrt(2.0)/6.0,   -sqrt(2.0)/6.0}
+//             };
+
+//             //each row is the vector that points from the origin to the coil
+
+//             float B[3] = {Bx, By, Bz};
+//             float I[6];
+
+//             for (int i = 0; i < 6; i++)
+//             {
+//               I[i] = 0;
+
+//               for (int j = 0; j < 3; j++)
+//               {
+//                 I[i] += Mcam[i][j] * B[j];
+//               }
+
+//               I[i] /= k;
+//             }
+// // if the coil is in the direction of the field, keep it on, otherwise zero it. This should be the only difference between the gradient and non-gradient fields
+//             for (int i = 0; i < 6; i++)
+//             {
+//                 float alignment =
+//                     Mcam[i][0]*Bx +
+//                     Mcam[i][1]*By +
+//                     Mcam[i][2]*Bz;
+
+//                 if (alignment < 0)
+//                     I[i] = 0;
+//             }
+
+//             C1 = I[0];
+//             C2 = I[1];
+//             C3 = I[2];
+//             C4 = I[3];
+//             C5 = I[4];
+//             C6 = I[5];
+
+//             // Normalize (makes sure max current is applied to some coil to optimize strength):
+
+//             float vals[6] = { abs(C1), abs(C2), abs(C3), abs(C4), abs(C5), abs(C6) };            
+//             MaxVal = findMax(vals, 6);
+
+//             C1 = C1/MaxVal;
+//             C2 = C2/MaxVal;
+//             C3 = C3/MaxVal;
+//             C4 = C4/MaxVal;
+//             C5 = C5/MaxVal;
+//             C6 = C6/MaxVal;
+
+
+//             set1(C1);
+//             set2(-C2);
+//             set3(C3);
+//             set4(C4);
+//             set5(C5); 
+//             set6(C6);
+
+
+          
+
+
+           
           }
     }
 
-    // set1(0); //west
-    // set2(0); //east
-    // set3(0); //4
-    // set4(0); //south
-    // set5(0); //5
-    // set6(0); //north
+      // set1(0);
+      // set2(0);
+      // set3(0);
+      // set4(0);
+      // set5(0);
+      // set6(0);
+
+ 
   
     // ================================================================
     // READ AND SEND CURRENT DATA BACK TO PYTHON (ACS712 5A sensors)

@@ -57,25 +57,27 @@ while True:
     #find coords of obj in
     #do contouring based on full res img
 
+    
+    resize_scale = 25
 
-    resize_scale = 100
     resize_ratio = (
                 width * resize_scale // 100,
                 height * resize_scale // 100,
             )
     
     x,y = b[0], b[1]
-    #rame = cv2.resize(frame, resize_ratio, interpolation=cv2.INTER_AREA)
+    frame = cv2.resize(frame, resize_ratio, interpolation=cv2.INTER_AREA)
     
-    #print(width,height, fps_cam)
+    print(width,height, fps_cam)
+    
 
-    cv2.circle(frame,(x,y),10, (255,255,0),-1)
+    #cv2.circle(frame,(x,y),10, (255,255,0),-1)
 
 
 
    
 
-    
+    """
     cv2.putText(
             frame,
             str(int(fps.get_fps())),
@@ -104,15 +106,15 @@ while True:
             0.5,
             (0, 255, 0),
             1,
-        )
+        )"""
 
     
     
     cv2.imshow("img",frame)
 
-  
+    
 
-    fps.get_fps()
+    print(fps.get_fps())
     if cv2.waitKey(1) & 0xFF == ord('q'):
         #Send(arduino,0,0,4)
         break

@@ -520,7 +520,7 @@ void set6(float DC6){
 
 void loop()
 {
-  digitalWrite(49, HIGH);  // for testing loop time and frequency of the code. will measure the time to to go low on this pin with an oscilloscope. 
+  //digitalWrite(49, HIGH);  // for testing loop time and frequency of the code. will measure the time to to go low on this pin with an oscilloscope. 
     // ================================================================
     // RECEIVE DATA FROM PYTHON OVER SERIALTRANSFER
     // ================================================================
@@ -783,5 +783,7 @@ void loop()
         //Serial.print("sent to python"); Serial.print(" ");
 }
 
-digitalWrite(49, LOW);  // for testing loop time and frequency of the code. will measure the time between Low and High on this pin with an oscilloscope. 
+
+                
+//digitalWrite(49, LOW);  // for testing loop time and frequency of the code. will measure the time between Low and High on this pin with an oscilloscope. 
 }

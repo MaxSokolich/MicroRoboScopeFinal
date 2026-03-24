@@ -25,6 +25,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap,QIcon
 from PyQt5.QtCore import Qt, QTimer, PYQT_VERSION_STR, QEvent
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread,QTimer
 import queue
 import cv2
 import os
@@ -228,6 +229,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.arduino_receive_timer = QTimer(self)
         self.arduino_receive_timer.timeout.connect(self.read_receive_arduino)
         self.arduino_receive_timer.start(15)#15msec timer to read arduino data. must be faster than the rate at which arduino sends data
+        self.sensor_status = False
+
         self.coil1_current = 0
         self.coil2_current = 0
         self.coil3_current = 0
@@ -282,6 +285,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.gammaspinBox.valueChanged.connect(self.get_widget_vals)
         self.ui.psispinBox.valueChanged.connect(self.get_widget_vals)
         self.ui.simulationbutton.clicked.connect(self.toggle_simulation)
+        self.ui.sensorbutton.clicked.connect(self.toggle_sensor_graph)
 
         self.ui.objectivebox.valueChanged.connect(self.get_objective)
         self.ui.exposurebox.valueChanged.connect(self.get_exposure)
@@ -366,13 +370,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.sensor_sheet.append(row)
 
         # REFRESH GUI: Only redraw the graph IF we actually got new data
-        if new_data_received:
+        if self.sensor_status == True:
+            if new_data_received:
+                for i in range(6):
+                    # pyqtgraph is optimized to handle deques/lists efficiently here
+                    self.curves[i].setData(self.data_buffers[i])
+        else:
             for i in range(6):
-                # pyqtgraph is optimized to handle deques/lists efficiently here
-                self.curves[i].setData(self.data_buffers[i])
-                
-            # Update your coil variables for other parts of the app
-            self.coil1_current = round(self.data_buffers[0][-1], 2)
+                self.curves[i].setData([])
+
+                    
+   
 
 
 
@@ -528,6 +536,26 @@ class MainWindow(QtWidgets.QMainWindow):
               
                     self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions  
                     self.psi = np.radians(self.ui.psispinBox.value())
+                
+                else:
+                    if len(robot_list[-1].trajectory) > 0:
+                        targetx = robot_list[-1].trajectory[-1][0]
+                        targety = robot_list[-1].trajectory[-1][1]
+
+                        #define robots current position
+                        robotx = robot_list[-1].position_list[-1][0]
+                        roboty = robot_list[-1].position_list[-1][1]
+                        
+                        #calculate error between node and robot
+                        direction_vec = [targetx - robotx, targety - roboty]
+                        self.alpha = np.arctan2(-direction_vec[1], direction_vec[0]) + np.pi/2
+                        self.gamma = np.radians(self.ui.gammaspinBox.value())
+                        self.psi = np.radians(self.ui.psispinBox.value())
+                        self.freq = self.ui.magneticfrequencyspinBox.value()
+                        error = np.sqrt(direction_vec[0] ** 2 + direction_vec[1] ** 2)
+                        if error < arrivalthresh:
+                            self.freq = 0
+
             
             
             #zero option
@@ -882,10 +910,10 @@ class MainWindow(QtWidgets.QMainWindow):
         
    
         if self.arduino_handler is not None: 
-            """self.tbprint(f"Sending: Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoust: "
+            self.tbprint(f"Sending: Bx, By, Bz, alpha, gamma, freq, psi, grad, equal, acoust: "
                     f"{self.Bx:.2f},{self.By:.2f},{self.Bz:.2f},{self.alpha:.2f},{self.gamma:.2f},"
                     f"{self.freq:.2f},{self.psi:.2f},{self.gradient_status:.2f},{self.equal_field_status:.2f},"
-                    f"{self.acoustic_frequency:.2f}")"""
+                    f"{self.acoustic_frequency:.2f}")
             
             self.arduino_handler.send(self.amplitude, self.Bx, self.By, self.Bz,
                                             self.alpha, self.gamma, self.freq, self.psi,
@@ -1049,6 +1077,17 @@ class MainWindow(QtWidgets.QMainWindow):
             self.simulator.stop()
             self.tbprint("Simulation Off")
             self.ui.simulationbutton.setText("Simulation On")
+
+    def toggle_sensor_graph(self):
+        """Toggle sensor graph data visualization on/off."""
+        if self.ui.sensorbutton.isChecked():
+            self.sensor_status = True
+            self.tbprint("Sensor Graph On")
+            self.ui.sensorbutton.setText("Sensor Off")
+        else:
+            self.sensor_status = False
+            self.tbprint("Sensor Graph Off")
+            self.ui.sensorbutton.setText("Sensor On")
    
     
     
@@ -1267,17 +1306,28 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.videopath == 0:
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
+
+                #self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2448)#david just added to speed up fps
+                #self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2048)#david just added to speed up fps
    
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
-                self.cap.set(cv2.CAP_PROP_FPS, 24)
+                #self.cap.set(cv2.CAP_PROP_FPS, 24)#david commented out to test 
                 self.tbprint("Connected to FLIR Camera")
 
                 if not self.cap.isOpened():
                     self.cap  = cv2.VideoCapture(0) 
+
+                    #self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2448)#david just added to speed up fps
+                    #self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2048)#david just added to speed up fps
+
                     self.tbprint("No EasyPySpin Camera Available")
             
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
+
+                #self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2448)#david just added to speed up fps
+                #self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2048)#david just added to speed up fps
+
                 self.tbprint("No EasyPySpin Camera Available")
                 
                 

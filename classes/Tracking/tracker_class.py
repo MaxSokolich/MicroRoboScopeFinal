@@ -60,7 +60,7 @@ class VideoThread(QThread):
         self.maskinvert = False
         self.crop_length_record = 200
         
-        self.exposure = 5000
+        self.exposure = 30000
         self.objective = 10
         self.memory = 15  
      
@@ -474,11 +474,15 @@ class VideoThread(QThread):
             
             
             ret, frame = self.cap.read()
+            #frame = cv2.resize(frame, (2448, 2048))  # (width, height)#added to downside high res images, but didn't speed it up
+            if not ret:
+                continue #chat said this would speed it up but i don't think it's doing much
         
             #control_mask = None
             if ret:       
                 if self.totalnumframes == 0:         
-                    self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
+                    #self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)#david commented out to speed up fps
+                    
                     self.pixel2um =   3.45 / self.objective
                     
 

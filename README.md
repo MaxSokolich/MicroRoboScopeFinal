@@ -1,3 +1,5 @@
+THIS IS A RESEARCH PROTOTYPE
+
 # Magnetoacoustic Microrobotic Manipulation System
 This system is a magnetic and acoustic microrobotic manipulation device. Its intention is to be a user friendly, low-cost, and portable micro-robotic
 experimentation platform. It contains an embedded single board computer, a microscope, power supplies, power

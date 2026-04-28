@@ -29,7 +29,7 @@ import queue
 import cv2
 import os
 from os.path import expanduser
-import csv
+import openpyxl 
 import pandas as pd
 from datetime import datetime
 from collections import deque
@@ -49,6 +49,7 @@ try:
 except Exception:
     pass
 
+import csv
 
 
 #from classes.Control.genjoystick_class import genJoystick
@@ -157,10 +158,15 @@ class MainWindow(QtWidgets.QMainWindow):
    
 
         self.save_status = False
-        self.magnetic_field_actions_sheet = None
-        self.sensor_sheet = None
-        self.robot_params_sheets = []
-        self.cell_params_sheets = []
+        self.recording_base_path = None
+        self.magnetic_field_actions_file = None
+        self.magnetic_field_actions_writer = None
+        self.sensor_file = None
+        self.sensor_writer = None
+        self.robot_files = []
+        self.robot_writers = []
+        self.cell_files = []
+        self.cell_writers = []
         self.ricochet_counter_x = [0]
         self.ricochet_counter_y = [0]
         
@@ -363,7 +369,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # Optional: Save every packet to your sheet here if logging is critical
             if self.save_status:
                 row = [time.time() - self.starttime] + currents
-                self.sensor_sheet.append(row)
+                self.sensor_writer.writerow(row)
 
         # REFRESH GUI: Only redraw the graph IF we actually got new data
         if new_data_received:
@@ -729,12 +735,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         #IF SAVE STATUS THEN CONTINOUSLY SAVE THE CURRENT ROBOT PARAMS AND MAGNETIC FIELD PARAMS TO AN EXCEL ROWS
-        if self.save_status == True:
-            self.magnetic_field_actions_sheet.append(self.actions)
-            for (sheet, bot) in zip(self.robot_params_sheets,self.robots):
-                sheet.append(bot[:-1])
-            for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
-                sheet.append(cell[:-1])
+        if self.save_status:
+            self.magnetic_field_actions_writer.writerow(self.actions)
+            for writer, bot in zip(self.robot_writers, self.robots):
+                writer.writerow(bot[:-1])
+            for writer, cell in zip(self.cell_writers, self.cells):
+                writer.writerow(cell[:-1])
         
 
         #also update robot  info display
@@ -891,145 +897,200 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+    @staticmethod
+    def _coerce_csv_value(value):
+        if value is None:
+            return None
+        if isinstance(value, str):
+            stripped_value = value.strip()
+            if stripped_value == "":
+                return None
+            try:
+                numeric_value = float(stripped_value)
+            except ValueError:
+                return stripped_value
+            if numeric_value.is_integer() and "." not in stripped_value and "e" not in stripped_value.lower():
+                return int(numeric_value)
+            return numeric_value
+        return value
+
+    def _write_csv_sheet_to_workbook(self, workbook, sheet_title, csv_path, trajectory=None):
+        sheet = workbook.create_sheet(title=sheet_title)
+        with open(csv_path, newline="") as csv_file:
+            reader = csv.reader(csv_file)
+            for row_index, row in enumerate(reader):
+                if row_index == 0:
+                    converted_header = list(row)
+                    if trajectory is not None:
+                        converted_header.extend(["Path X (um)", "Path Y (um)"])
+                    sheet.append(converted_header)
+                    continue
+
+                converted_row = [self._coerce_csv_value(value) for value in row]
+                if trajectory is not None:
+                    trajectory_index = row_index - 1
+                    if trajectory_index < len(trajectory):
+                        path_x, path_y = trajectory[trajectory_index]
+                    else:
+                        path_x, path_y = None, None
+                    converted_row.extend([
+                        self._coerce_csv_value(path_x),
+                        self._coerce_csv_value(path_y),
+                    ])
+                sheet.append(converted_row)
+
     def start_data_record(self):
         """
-        Initialize in-memory CSV data structures for data recording.
+        Initialize CSV files for data recording.
 
-        Creates row-lists for:
-        - Magnetic field actions (Bx, By, Bz, angles, frequencies)
-        - Sensor current readings
-        - Robot tracking data (position, velocity, acceleration)
-        - Cell tracking data
-
-        Data is buffered in memory and written to CSV files when
-        stop_data_record() is called.
+        Data is streamed to CSV during capture and converted into a single
+        Excel workbook with multiple sheets when recording stops.
         """
-        self.tbprint("Recording CSV Data...")
+        self.tbprint("Recording Data to CSV...")
         self.frame_number = 0
         self.tracker.framenum = 1
         self.tracker.start_time = time.time()
         self.tracker.time_stamp = 0
         self.starttime = time.time()
 
-        # Each "sheet" is a plain Python list of rows (first row = header).
-        # list.append() is used the same way as openpyxl sheet.append().
+        os.makedirs(self.new_dir_path, exist_ok=True)
+        self.recording_base_path = os.path.join(self.new_dir_path, self.output_file_name)
 
-        # Magnetic Field Actions
-        self.magnetic_field_actions_sheet = [
-            ["Frame", "Time(s)", "Bx (%)", "By (%)", "Bz (%)",
-             "Alpha (rad)", "Gamma (rad)", "Rolling Frequency (Hz)",
-             "Psi (rad)", "Gradient?", "Equal Field?", "Acoustic Frequency (Hz)"]
-        ]
+        self.magnetic_field_actions_file = open(
+            self.recording_base_path + "_Magnetic_Field_Actions.csv", mode="w", newline=""
+        )
+        self.magnetic_field_actions_writer = csv.writer(self.magnetic_field_actions_file)
+        self.magnetic_field_actions_writer.writerow([
+            "Frame", "Time(s)", "Bx (%)", "By (%)", "Bz (%)", "Alpha (rad)", "Gamma (rad)",
+            "Rolling Frequency (Hz)", "Psi (rad)", "Gradient?", "Equal Field?", "Acoustic Frequency (Hz)"
+        ])
 
-        # Sensors
-        self.sensor_sheet = [
-            ["Time (s)", "I(A) | +Y Coil", "I(A) | +X Coil",
-             "I(A) | -Y Coil", "I(A) | -X Coil",
-             "I(A) | +Z Coil", "I(A) | -Z Coil"]
-        ]
+        self.sensor_file = open(self.recording_base_path + "_Sensors.csv", mode="w", newline="")
+        self.sensor_writer = csv.writer(self.sensor_file)
+        self.sensor_writer.writerow([
+            "Time (s)", "I(A) | +Y Coil", "I(A) | +X Coil", "I(A) | -Y Coil",
+            "I(A) | -X Coil", "I(A) | +Z Coil", "I(A) | -Z Coil"
+        ])
 
-        # Robot data sheets
-        self.robot_params_sheets = []
-        for i in range(len(self.robots)):
-            robot_sheet = [
-                ["Frame", "Time(s)", "Pos X (um)", "Pos Y (um)",
-                 "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)",
-                 "Acc X (um/s2)", "Acc Y (um/s2)", "Acc Mag (um/s2)",
-                 "Blur", "Area (um^2)", "Crop Length (um)", "pixel2um",
-                 "Path X (um)", "Path Y (um)"]
-            ]
-            self.robot_params_sheets.append(robot_sheet)
+        self.robot_files = []
+        self.robot_writers = []
+        for index in range(len(self.robots)):
+            robot_file = open(
+                self.recording_base_path + "_Robot_{}.csv".format(index + 1), mode="w", newline=""
+            )
+            robot_writer = csv.writer(robot_file)
+            robot_writer.writerow([
+                "Frame", "Time(s)", "Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)",
+                "Vel Mag (um/s)", "Acc X (um/s2)", "Acc Y (um/s2)", "Acc Mag (um/s2)", "Blur",
+                "Area (um^2)", "Crop Length (um)", "pixel2um"
+            ])
+            self.robot_files.append(robot_file)
+            self.robot_writers.append(robot_writer)
 
-        # Cell data sheets
-        self.cell_params_sheets = []
-        for i in range(len(self.cells)):
-            cell_sheet = [
-                ["Frame", "Time(s)", "Pos X (um)", "Pos Y (um)",
-                 "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)",
-                 "Blur", "Area (um^2)", "Crop Length (um)", "pixel2um"]
-            ]
-            self.cell_params_sheets.append(cell_sheet)
+        self.cell_files = []
+        self.cell_writers = []
+        for index in range(len(self.cells)):
+            cell_file = open(
+                self.recording_base_path + "_Cell_{}.csv".format(index + 1), mode="w", newline=""
+            )
+            cell_writer = csv.writer(cell_file)
+            cell_writer.writerow([
+                "Frame", "Time(s)", "Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)",
+                "Vel Mag (um/s)", "Blur", "Area (um^2)", "Crop Length (um)", "pixel2um"
+            ])
+            self.cell_files.append(cell_file)
+            self.cell_writers.append(cell_writer)
 
-        # Tell update_actions to start buffering rows
         self.save_status = True
-
-
-
-
-
-    @staticmethod
-    def _write_csv(rows, file_path):
-        """Write a list of rows to a CSV file."""
-        with open(file_path, 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerows(rows)
 
     def stop_data_record(self):
         """
-        Stop data recording and save CSV files.
-
-        Finalises the buffered row-lists with trajectory data and writes
-        one CSV file per sheet to disk using the current output filename.
-        Files produced:
-            <name>_Magnetic_Field_Actions.csv
-            <name>_Sensors.csv
-            <name>_Robot_1.csv  (one per tracked robot)
-            <name>_Cell_1.csv   (one per tracked cell)
+        Stop data recording, close CSV files, and export a multi-sheet Excel workbook.
         """
-        # Stop buffering new rows
         self.save_status = False
 
-        base_path = os.path.join(self.new_dir_path, self.output_file_name)
-        self.tbprint("CSV Data Recording Stopped")
-
-        if self.magnetic_field_actions_sheet is not None:
-            # Fill trajectory columns into robot sheets before writing
-            if len(self.robot_params_sheets) > 0:
-                try:
-                    for i in range(len(self.robot_params_sheets)):
-                        for idx, (x, y) in enumerate(self.robots[i][-1]):
-                            data_row_idx = idx + 1  # row 0 is the header
-                            if data_row_idx < len(self.robot_params_sheets[i]):
-                                row = self.robot_params_sheets[i][data_row_idx]
-                                # Extend to 16 columns if needed
-                                while len(row) < 16:
-                                    row.append(None)
-                                row[14] = x   # Path X (um)
-                                row[15] = y   # Path Y (um)
-                except Exception:
-                    pass
-
-            # Write one CSV file per sheet
-            self._write_csv(
-                self.magnetic_field_actions_sheet,
-                base_path + "_Magnetic_Field_Actions.csv"
+        csv_paths = []
+        if self.recording_base_path is not None:
+            csv_paths.extend([
+                self.recording_base_path + "_Magnetic_Field_Actions.csv",
+                self.recording_base_path + "_Sensors.csv",
+            ])
+            csv_paths.extend(
+                self.recording_base_path + "_Robot_{}.csv".format(index + 1)
+                for index in range(len(self.robot_files))
             )
-            self._write_csv(
-                self.sensor_sheet,
-                base_path + "_Sensors.csv"
+            csv_paths.extend(
+                self.recording_base_path + "_Cell_{}.csv".format(index + 1)
+                for index in range(len(self.cell_files))
             )
-            for i, sheet in enumerate(self.robot_params_sheets):
-                self._write_csv(sheet, base_path + "_Robot_{}.csv".format(i + 1))
-            for i, sheet in enumerate(self.cell_params_sheets):
-                self._write_csv(sheet, base_path + "_Cell_{}.csv".format(i + 1))
 
-            self.tbprint("CSV Data Saved to: {}_*.csv".format(base_path))
+        for csv_file in [self.magnetic_field_actions_file, self.sensor_file, *self.robot_files, *self.cell_files]:
+            if csv_file is not None and not csv_file.closed:
+                csv_file.close()
 
-        # Reset sheet references
-        self.magnetic_field_actions_sheet = None
-        self.sensor_sheet = None
-        self.robot_params_sheets = []
-        self.cell_params_sheets = []
+        if self.recording_base_path is None:
+            self.tbprint("CSV Data Recording Stopped")
+            return
+
+        workbook = openpyxl.Workbook(write_only=True)
+
+        self._write_csv_sheet_to_workbook(
+            workbook,
+            "Magnetic Field Actions",
+            self.recording_base_path + "_Magnetic_Field_Actions.csv",
+        )
+        self._write_csv_sheet_to_workbook(
+            workbook,
+            "Sensors",
+            self.recording_base_path + "_Sensors.csv",
+        )
+
+        for index in range(len(self.robot_files)):
+            trajectory = self.robots[index][-1] if index < len(self.robots) else []
+            self._write_csv_sheet_to_workbook(
+                workbook,
+                "Robot {}".format(index + 1),
+                self.recording_base_path + "_Robot_{}.csv".format(index + 1),
+                trajectory=trajectory,
+            )
+
+        for index in range(len(self.cell_files)):
+            self._write_csv_sheet_to_workbook(
+                workbook,
+                "Cell {}".format(index + 1),
+                self.recording_base_path + "_Cell_{}.csv".format(index + 1),
+            )
+
+        file_path = self.recording_base_path + ".xlsx"
+        workbook.save(file_path)
+        self.tbprint("Excel Data Recording Stopped")
+        self.tbprint("Excel Data Saved to: {}".format(file_path))
+
+        for csv_path in csv_paths:
+            try:
+                os.remove(csv_path)
+            except OSError:
+                pass
+
+        self.magnetic_field_actions_file = None
+        self.magnetic_field_actions_writer = None
+        self.sensor_file = None
+        self.sensor_writer = None
+        self.robot_files = []
+        self.robot_writers = []
+        self.cell_files = []
+        self.cell_writers = []
+        self.recording_base_path = None
 
     
     def savedata(self):
         """Toggle data recording on/off and handle UI updates."""
         if self.ui.savedatabutton.isChecked():
             self.ui.savedatabutton.setText("Stop")
-            self.start_data_record()
             self.output_file_name = self.ui.videoNameLineEdit.text().strip()
             if not self.output_file_name:
                 self.output_file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
+            self.start_data_record()
         else:
             self.ui.savedatabutton.setText("Save Data")
             self.stop_data_record()

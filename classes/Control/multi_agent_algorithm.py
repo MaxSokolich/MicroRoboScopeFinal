@@ -7,6 +7,7 @@ from classes.Control.mlp.toMax.xy2pxl import CoordinateMapper
 from stable_baselines3 import PPO
 import time
 import math
+from pathlib import Path
 
 class multi_agent_algorithm:
     def __init__(self, pix2metric, video_width, video_height):
@@ -35,7 +36,9 @@ class multi_agent_algorithm:
         self.width = video_width#um
         self.height = video_height#um
 
-        self.model =  PPO.load(r'C:\Users\Das_Lab_Admin\Desktop\REPOS\MicroRoboScopeFinal\classes\Control\mlp\toMax\best_model.zip',device="cpu")
+        # Construct path to model file relative to this file's location
+        model_path = Path(__file__).parent / "mlp" / "toMax" / "best_model.zip"
+        self.model =  PPO.load(str(model_path), device="cpu")
 
         self.prev_action = np.zeros(2, dtype=np.float32)
 
